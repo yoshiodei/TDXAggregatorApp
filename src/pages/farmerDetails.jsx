@@ -196,7 +196,7 @@ const completeOrder = async (farmerDataObj) => {
             <div className="w-full">
               <label className="text-[0.9em] font-bold text-slate-600 mb-1">Phone Number</label>
               <div className="rounded w-full h-[2.5em] bg-white relative ps-2 pe-5 border border-slate-200">
-                <input value={phone} onChange={(e) => setPhone(e.target.value)} min={0} placeholder="Enter phone number" className="rounded w-full h-full" />
+                <input value={phone} type='number' onChange={(e) => setPhone(e.target.value)} min={0} placeholder="Enter phone number" className="rounded w-full h-full" />
               </div>
             </div>
           </div>)

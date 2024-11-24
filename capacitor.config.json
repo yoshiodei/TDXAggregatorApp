@@ -1,5 +1,9 @@
 {
-  "appId": "com.example.app",
+  "appId": "com.tdxapps.aggregator",
   "appName": "tdxaggregatorapp",
-  "webDir": "dist"
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "android": {
+    "webContentsDebuggingEnabled": true
+  }
 }

@@ -31,6 +31,17 @@ export default function Signup({ f7router }) {
     setUserData({...userData, [name]: value});
   };
 
+  const saveToDevice = (dataObj) => {
+    const existingUsers = JSON.parse(localStorage.getItem('users')) || [];
+    const isDuplicate = existingUsers.some((user) => user.token === dataObj.token);
+    if (isDuplicate) { return; }
+    else {
+      const updatedUsers = [...existingUsers, dataObj];
+      localStorage.setItem('users', JSON.stringify(updatedUsers));
+      return;
+    }
+ };
+
   const registerUser = async (data) => {
     try {
       const response = await axios.post(
@@ -47,6 +58,18 @@ export default function Signup({ f7router }) {
       if(registerData.error){
         f7.dialog.alert(registerData.message);
       }else{
+        const sha256Password = CryptoJS.SHA256(userData.password).toString();
+
+        const userData = {
+          password: sha256Password,
+          firstname: registerData.firstname,
+          lastname: registerData.lastname,
+          community_id: registerData.community_id,
+          mobile: registerData.mobile,  
+          token: registerData.token,  
+        };
+
+        saveToDevice(userData);
         store.dispatch('setUser', registerData);
         f7router.navigate('/sync-data/');
       }
@@ -65,7 +88,7 @@ export default function Signup({ f7router }) {
     if(password !== confirmpassword) {
       f7.dialog.alert('PINs provided do not match');
     }
-    if(password.length === 4 || confirmpassword.length === 4) {
+    if(password.length !== 4 || !confirmpassword.length !== 4) {
       f7.dialog.alert('PINs must be 4 digits');
     }
     else {

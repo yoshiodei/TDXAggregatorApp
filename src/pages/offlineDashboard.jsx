@@ -1,72 +1,65 @@
-import React, { useEffect, useState } from 'react';
-import { MdOutlineRefresh } from "react-icons/md";
+import React,{useState, useEffect} from 'react'
 import {
-  Page, f7,
-} from 'framework7-react';
-import Navbar from '../components/navbar';
-import axios from 'axios';
-import store from '../js/store';
-import TimeAgo from 'javascript-time-ago';
-import ReactTimeAgo from 'react-time-ago'; 
+  Page
+} from 'framework7-react'
+import TimeAgo from 'javascript-time-ago'
+import ReactTimeAgo from 'react-time-ago' 
 import en from 'javascript-time-ago/locale/en'
+import Navbar from '../components/navbar'
 import bagIcon from '../assets/bag-icon.png'
 import scaleIcon from '../assets/scale-icon.png'
 import farmerIcon from '../assets/farmer-icon.png'
+import store from '../js/store'
+import { MdCloudOff } from 'react-icons/md'
 
-const Dashboard = ({ f7router }) => {
+export default function OfflineDashboard({ f7router }) {
+    const [isOnline, setIsOnline] = useState(navigator.onLine);
+    const [time, setTime] = useState('');
+  
+    useEffect(() => {
+      const handleOnline = () => {
+        setIsOnline(true);
+      };
+  
+      const handleOffline = () => {
+        setIsOnline(false);
+      };
+  
+      window.addEventListener('online', handleOnline);
+      window.addEventListener('offline', handleOffline);
+  
+      return () => {
+        window.removeEventListener('online', handleOnline);
+        window.removeEventListener('offline', handleOffline);
+      };
+    }, [time]);  
+
   TimeAgo.addLocale(en);
-  const [userBalance, setUserBalance] = useState({});
-  const [time, setTime] = useState('');
-
-  const fetchUserBalance = async () => {
-    try {
-      const response = await axios.post(
-        `https://torux.app/api/user/milestones/${store.state.user.token}`,
-        {}, // This is the request body, currently empty
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${store.state.user.access_token}`,
-          },
-        }
-      );
-      const milestoneData = response.data;
-      setUserBalance(milestoneData)
-      // setErrorMessage('');
-      // setCommodityList(commodityData);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      // setErrorMessage(error.code);
-      f7.dialog.alert('Unable to fetch data');
-    }
- }
-
- useEffect(() => {
-   fetchUserBalance();
- }, [time]);
 
   return (
-  <Page name="home">
+    <Page name="home">
     <div className="w-full flex flex-col min-h-full">
-
-      <Navbar  title="Dashboard" goBack={false} f7router={f7router} menu={true}/>
-
+      <div className="bg-red-500 text-white flex items-center justify-center p-1 text-[0.9em] gap-x-1">
+        <MdCloudOff  />
+        <p className=" text-semibold">You are offline</p>
+      </div>
+      <Navbar  title="Dashboard" goBack={false} f7router={f7router}/>
       <div className="flex-1 w-full sm:p-5 p-3 flex flex-col gap-y-5 bg-background-primary">
         <div>
-          <h1 className="font-bold mb-2">Hello, {store.state.user.firstname}</h1>
+          <h1 className="font-bold mb-2">Hello, {store.state?.offlineUser?.firstname}</h1>
           <div className="p-3 rounded-lg bg-primary text-white">
-            {(userBalance.last_synced) && (<p className="text-[0.9em] text-right mb-1">
+            {(store.state?.offlineUser?.last_synced) && (<p className="text-[0.9em] text-right mb-1">
               Last updated 
               {' '}
-              <ReactTimeAgo date={new Date(userBalance?.last_synced)} locale="en-US"/>
+              <ReactTimeAgo date={new Date(store.state?.offlineUser?.last_synced)} locale="en-US"/>
             </p>)}
-            <h2 className="text-[1.5em] sm:text-[2em] font-bold leading-tight">{`Ghc ${userBalance?.account_balance || 'N/A'}`}</h2>
+            <h2 className="text-[1.5em] sm:text-[2em] font-bold leading-tight">{`Ghc ${store.state?.offlineUser?.account_balance || 'N/A'}`}</h2>
             <h5 className="text-[0.95em] sm:text-[1.1em] font-semi-bold leading-tight">Available Balance</h5>
-            <div className="flex justify-end">
+            {/* <div className="flex justify-end">
               <button onClick={() => setTime(new Date().getMilliseconds())} className="flex justify-center items-center rounded-full bg-green-600 w-[1.6em] h-[1.6em]">
                 <MdOutlineRefresh className="text-[1.45em]" />
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -80,7 +73,7 @@ const Dashboard = ({ f7router }) => {
               <div className="flex-1 flex items-center">
                 <div>
                   <h6 className="text-[0.85em] font-semibold">Total farmers onboarded</h6>
-                  <h4 className="font-semibold">{userBalance.total_users}</h4>
+                  <h4 className="font-semibold">{store.state?.offlineUser?.total_users}</h4>
                 </div>  
               </div>  
               <div className="flex items-center">
@@ -97,7 +90,7 @@ const Dashboard = ({ f7router }) => {
               <div className="flex-1 flex items-center">
                 <div>
                   <h6 className="text-[0.85em] font-semibold">Total cash transaction</h6>
-                  <h4 className="font-semibold">{userBalance.total_cost}</h4>
+                  <h4 className="font-semibold">{store.state?.offlineUser?.total_cost}</h4>
                 </div>  
               </div>  
               <div className="flex items-center">
@@ -114,7 +107,7 @@ const Dashboard = ({ f7router }) => {
               <div className="flex-1 flex items-center">
                 <div>
                   <h6 className="text-[0.85em] font-semibold">Total quantities sold</h6>
-                  <h4 className="font-semibold">{userBalance.total_quantity}</h4>
+                  <h4 className="font-semibold">{store.state?.offlineUser?.total_quantity}</h4>
                 </div>  
               </div>  
               <div className="flex items-center">
@@ -127,12 +120,12 @@ const Dashboard = ({ f7router }) => {
           </div>
 
           <div className="flex flex-col gap-y-2 mb-3">
-            <button onClick={() => f7router.navigate('/sell-to-tdx/')} className="rounded bg-primary h-[30px] sm:h-[3.5em] flex justify-center items-center">
+            <button onClick={() => f7router.navigate('/sell-to-tdx-offline/')} className="rounded bg-primary h-[30px] sm:h-[3.5em] flex justify-center items-center">
               <h6 className="text-white font-bold">Sell to TDX</h6>
             </button>
-            {/* <button className="rounded border-2 border-primary h-[3.5em] flex justify-center items-center">
-              <h6 className="font-bold">Place Order</h6>
-            </button> */}
+            {(isOnline) && (<button onClick={() => f7router.navigate('/login/')} className="rounded bg-white border-2 border-primary h-[30px] sm:h-[3.5em] flex justify-center items-center">
+              <h6 className="font-bold text-primary">Switch to online mode</h6>
+            </button>)}
           </div>
 
         </div>
@@ -140,7 +133,5 @@ const Dashboard = ({ f7router }) => {
       </div>
     </div>
   </Page>
-  );
+  )
 }
-
-export default Dashboard;

@@ -32,6 +32,7 @@ const saleDataInitialState = {
 const store = createStore({
   state: {
     user: initialState,
+    offlineUser: {},
     saleData: saleDataInitialState,
   },
   getters: {
@@ -43,6 +44,9 @@ const store = createStore({
     setUser({ state }, user) {
       state.user = user;
     },
+    setOfflineUser({ state }, user) {
+      state.offlineUser = user;
+    },
     updateSaleData({ state }, data) {
       const updatedSaleData = {...state.saleData, ...data};
       state.saleData = updatedSaleData;
@@ -50,6 +54,8 @@ const store = createStore({
     resetState({ state }) {
       state = {
         user: initialState,
+        offlineUser: {},
+        saleData: saleDataInitialState,
       };
     },
 

@@ -20,6 +20,11 @@ import ForgotPassword from '../pages/forgotPassword.jsx';
 import SyncData from '../pages/syncData.jsx';
 import LoginPin from '../pages/loginPin.jsx';
 import SetPin from '../pages/setPin.jsx';
+import OfflineLogin from '../pages/offlineLogin.jsx';
+import OfflineDashboard from '../pages/offlineDashboard.jsx';
+import OfflineSellToTDX from '../pages/offlineSellToTDX.jsx';
+import OfflineSaleComplete from '../pages/offlineSaleComplete.jsx';
+import PendingTransactions from '../pages/pendingTransactions.jsx';
 
 var routes = [
   {
@@ -79,8 +84,28 @@ var routes = [
     component: OrderStatus,
   },
   {
+    path: '/pending-transactions/',
+    component: PendingTransactions,
+  },
+  {
     path: '/farmers/',
     component: Farmers,
+  },
+  {
+    path: '/offline-login/',
+    component: OfflineLogin,
+  },
+  {
+    path: '/offline-dashboard/',
+    component: OfflineDashboard,
+  },
+  {
+    path: '/sell-to-tdx-offline/',
+    component: OfflineSellToTDX,
+  },
+  {
+    path: '/offline-sale-complete/',
+    component: OfflineSaleComplete,
   },
 
 

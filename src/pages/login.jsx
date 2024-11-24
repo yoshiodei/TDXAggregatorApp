@@ -51,43 +51,66 @@ const hashHMAC = (message, key) => {
   return CryptoJS.HmacSHA256(message, key).toString(CryptoJS.enc.Hex);
 };
 
-const handleLogin = async () => {
-    // if (!challenge) {
-        await getChallenge();
-    // }
-    // if (challenge) {
-    //     // Convert password to SHA-256
-    //     const sha256Password = CryptoJS.SHA256(credentials.password).toString();
-    //     const response = hashHMAC(challenge, sha256Password);
 
-    //     try {
-    //         const result = await axios.post(`https://torux.app/api/validate_response/${response}`,{});
-    //         if (!result.data.error) {
-    //             store.dispatch('setUser', result.data);
-    //             f7router.navigate('/sync-data/');
-    //             console.log('user data', result.data);
-    //         } else {
-    //             console.log('response', response);
-    //             console.log('user data', result);
-    //             f7.dialog.alert('Incorrect Phone Number or Password.');
-    //         }
-    //     } catch (error) {
-    //         console.error('Error validating response', error);
-    //         f7.dialog.alert('Something went wrong. Try again later');
-    //     }
-    // }
-};
+  const handleLogin = async () => {
+    await getChallenge();
+  };
+
+  const saveToDevice = (dataObj) => {
+     const existingUsers = JSON.parse(localStorage.getItem('users')) || [];
+     const isDuplicate = existingUsers.some((user) => user.token === dataObj.token);
+     if (isDuplicate) { return; }
+     else {
+       const updatedUsers = [...existingUsers, dataObj];
+       localStorage.setItem('users', JSON.stringify(updatedUsers));
+       return;
+     }
+  };
+
+  const findUserByNumber = (users, mobile) => {
+    return users.find((user) => user.mobile === mobile) || null;
+  };
+
+  const checkForOfflineUserData = (data) => {
+    const existingUsers = JSON.parse(localStorage.getItem('users')) || [];
+    if(!existingUsers?.length){
+      return data;
+    } else {
+       const offlineUserData = findUserByNumber(existingUsers, data.mobile);
+       if(!offlineUserData?.mobile){
+         f7.dialog.alert('Unable to fetch offline data');
+         return {};
+       }else {
+         return {...data, pendingTransactions: (offlineUserData.pendingTransactions || [])}
+       }
+    }
+  };
 
   const validateUser = async (challenge) => {
-    const sha256Password = CryptoJS.SHA256(credentials.password).toString();
-        const response = hashHMAC(challenge, sha256Password);
+       const sha256Password = CryptoJS.SHA256(credentials.password).toString();
+       const response = hashHMAC(challenge, sha256Password);      
 
         try {
             const result = await axios.post(`https://torux.app/api/validate_response/${response}`,{});
             if (!result.data.error) {
-                store.dispatch('setUser', result.data);
+
+                const updatedOfflineUserData = checkForOfflineUserData(result.data);
+                store.dispatch('setUser', updatedOfflineUserData);
+
+                const userData = {
+                  ...updatedOfflineUserData,
+                  password: sha256Password,
+                  firstname: result.data.firstname,
+                  lastname: result.data.lastname,
+                  community_id: result.data.community_id,
+                  mobile: result.data.mobile,  
+                  token: result.data.token,  
+                };
+
+                saveToDevice(userData);
                 f7router.navigate('/sync-data/');
-                console.log('user data', result.data);
+                console.log('global user data', updatedOfflineUserData);
+
             } else {
                 console.log('response', response);
                 console.log('user data', result);
@@ -125,7 +148,7 @@ const handleLogin = async () => {
                   </div>
                 </div>
                 <div className="w-full">
-                  <label className="text-[0.9em] font-bold text-slate-600 mb-1">Pin</label>
+                  <label className="text-[0.9em] font-bold text-slate-600 mb-1">PIN</label>
                   <div className="rounded w-full h-[2.5em] bg-white relative ps-2 pe-[50px] border border-slate-200">
                     {/* {!passwordVisible && (<button onClick={() => setPasswordVisible(!passwordVisible)} className="flex justify-center items-center absolute top-[0.5em] right-[10px] w-[1.5em] h-[1.5em]">
                       <FaEye className="text-slate-500" />
@@ -137,7 +160,7 @@ const handleLogin = async () => {
                       name="password"
                       value={credentials.password}
                       onChange={(e) => handleChange(e)}
-                      placeholder="Enter password"
+                      placeholder="Enter PIN"
                       type="text"
                       className="rounded w-full h-full"
                     />

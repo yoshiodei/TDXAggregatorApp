@@ -184,10 +184,6 @@ useEffect(() => {
   return (
     <Page name="home">
     <div className="relative w-full flex flex-col h-screen overflow-hidden">
-      {(errorMessage === 'ERR_NETWORK') && (<div className="bg-red-500 text-white flex items-center justify-center p-1 text-[0.9em] gap-x-1">
-        <MdCloudOff  />
-        <p className=" text-semibold">You are offline</p>
-      </div>)}
       <Navbar  title="Sell to TDX" goBack={false} f7router={f7router} menu={true}/>
 
       <div className="flex-1 w-full sm:p-5 p-3 flex flex-col justify-between gap-y-5 bg-background-primary">

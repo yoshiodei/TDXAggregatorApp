@@ -10,6 +10,9 @@ import store from '../js/store';
 
 export default function SyncData({ f7router }) {
   const [errorMessage, setErrorMessage] = useState('');
+  const [userMilestone, setUserMilestone] = useState({});
+  const [commodityList, setCommodityList] = useState({});
+  const [siloList, setSiloList] = useState({});
   const [loading, setLoading] = useState(false);
 
   const fetchSilo = async () => {
@@ -25,8 +28,11 @@ export default function SyncData({ f7router }) {
         }
       );
       const siloData = response.data;
+      if(!errorMessage){
+        localStorage.setItem('silos', JSON.stringify(siloData));
+      }
       setErrorMessage('');
-      // setSiloList(siloData);
+      setSiloList(siloData);
     } catch (error) {
       console.error('Error fetching data:', error);
       setErrorMessage(error.code);
@@ -47,8 +53,12 @@ export default function SyncData({ f7router }) {
         }
       );
       const commodityData = response.data;
+      if(!errorMessage){
+        console.log('commodity synced');
+        localStorage.setItem('commodities', JSON.stringify(commodityData));
+      }
       setErrorMessage('');
-      // setCommodityList(commodityData);
+      setCommodityList(commodityData);
     } catch (error) {
       console.error('Error fetching data:', error);
       setErrorMessage(error.code);
@@ -70,6 +80,10 @@ export default function SyncData({ f7router }) {
       );
       const milestoneData = response.data;
       console.log('mile stone data', milestoneData);
+      setUserMilestone(milestoneData);
+      if(!errorMessage){
+        saveDataToDevice(milestoneData);
+      }
       setErrorMessage('');
       // setCommodityList(commodityData);
     } catch (error) {
@@ -78,6 +92,26 @@ export default function SyncData({ f7router }) {
       f7.dialog.alert('Unable to fetch data');
     }
 }
+
+const findUserByToken = (users, token) => {
+  return users.find((user) => user.token === token) || null;
+};
+
+const saveDataToDevice = (milestone) => {
+  const existingUsers = JSON.parse(localStorage.getItem('users')) || [];
+  const matchedUser = findUserByToken(existingUsers, store.state.user.token);
+  const updatedUser = {...matchedUser, ...milestone};
+  console.log('updated user', updatedUser);
+  const newUsers = existingUsers.map((user) => (
+    (user.token === updatedUser.token) ? updatedUser : user
+  ));
+
+  console.log('saved users', newUsers);
+
+  localStorage.setItem('users', JSON.stringify(newUsers));
+  // localStorage.setItem('commodities', JSON.stringify(commodityList));
+  // localStorage.setItem('silos', JSON.stringify(siloList));
+};
 
 const syncData = async () => {
   setLoading(true);
