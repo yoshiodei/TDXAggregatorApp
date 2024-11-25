@@ -25,6 +25,7 @@ import OfflineDashboard from '../pages/offlineDashboard.jsx';
 import OfflineSellToTDX from '../pages/offlineSellToTDX.jsx';
 import OfflineSaleComplete from '../pages/offlineSaleComplete.jsx';
 import PendingTransactions from '../pages/pendingTransactions.jsx';
+import CompleteTransaction from '../pages/completeTransaction.jsx';
 
 var routes = [
   {
@@ -86,6 +87,10 @@ var routes = [
   {
     path: '/pending-transactions/',
     component: PendingTransactions,
+  },
+  {
+    path: '/pending-transaction/:id',
+    component: CompleteTransaction,
   },
   {
     path: '/farmers/',
