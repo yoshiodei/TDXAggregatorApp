@@ -10,6 +10,8 @@ import { detectNetwork } from '../config/util';
 import { mobileNetworks } from '../config/constant';
 
 export default function FarmerDetails({ f7router }) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingMomo, setIsLoadingMomo] = useState(false);
   const [commodityPrice, setCommodityPrice] = useState({});
   const [errorMessage, setErrorMessage] = useState('');
   const [phone, setPhone] = useState('');
@@ -129,16 +131,18 @@ const completeOrder = async (farmerDataObj) => {
     fetchFarmer();
   }, []);
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if(phone.trim().length !== 10){
       f7.dialog.alert('Phone number is no up to 10 digits.')
     }
     else{
-      verifyMomoNumber();
+      setIsLoadingMomo(true);
+      await verifyMomoNumber();
+      setIsLoadingMomo(false);
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async() => {
     let payto = 'Mainnumber';
     if(phone === farmer.mobile){
       payto = 'Mainnumber';
@@ -161,8 +165,10 @@ const completeOrder = async (farmerDataObj) => {
       unit_price: commodityPrice.bagsrate,
       commodity_qc: '',
     };
-
-    completeOrder(farmerData);
+    
+    setIsLoading(true);
+    await completeOrder(farmerData);
+    setIsLoading(false);
   }
 
   return (
@@ -223,12 +229,12 @@ const completeOrder = async (farmerDataObj) => {
 
           {(!momoNumber.message && !momoNumber.number) ? (<div className="mt-5">
             <button onClick={() => handleSearch()} className="flex justify-center items-center w-full sm:h-[3em] h-[35px]  rounded bg-primary">
-              <h6 className="sm:text-lg text-base font-semibold text-white">Search Number</h6>
+              <h6 className="sm:text-lg text-base font-semibold text-white">{isLoadingMomo ? '...loading' : 'Search Number'}</h6>
             </button>
           </div>) :
           (<div className="mt-5">
             <button onClick={() => handleSubmit()} className="flex justify-center items-center w-full sm:h-[3em] h-[35px]  rounded bg-primary">
-              <h6 className="sm:text-lg text-base font-semibold text-white">Continue</h6>
+              <h6 className="sm:text-lg text-base font-semibold text-white">{isLoading ? '...loading' : 'Continue'}</h6>
             </button>
             <div className="mt-2 flex justify-center">
               <button onClick={() => setMomoNumber({message: '', number: ''})}><h6 className="text-center text-[0.9em] text-primary underline">Edit number</h6></button>

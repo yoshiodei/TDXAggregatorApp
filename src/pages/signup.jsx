@@ -4,6 +4,7 @@ import Navbar from '../components/navbar'
 import { IoIosArrowDown } from 'react-icons/io'
 import { FaEye } from 'react-icons/fa'
 import { FaEyeSlash } from 'react-icons/fa'
+import CryptoJS, { crypto } from 'crypto-js';
 import axios from 'axios'
 import store from '../js/store'
 import { communityList } from '../config/constant'
@@ -12,6 +13,7 @@ export default function Signup({ f7router }) {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const [firstName, setFirstName] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [lastName, setLastName] = useState('');
   const [communities, setCommunities] = useState([]);
   
@@ -38,6 +40,7 @@ export default function Signup({ f7router }) {
     else {
       const updatedUsers = [...existingUsers, dataObj];
       localStorage.setItem('users', JSON.stringify(updatedUsers));
+      console.log('registration complete');
       return;
     }
  };
@@ -58,38 +61,51 @@ export default function Signup({ f7router }) {
       if(registerData.error){
         f7.dialog.alert(registerData.message);
       }else{
-        const sha256Password = CryptoJS.SHA256(userData.password).toString();
+        // const sha256Password = CryptoJS.SHA256(userData.password).toString();
+        // console.log('hashed password', sha256Password);
 
-        const userData = {
-          password: sha256Password,
-          firstname: registerData.firstname,
-          lastname: registerData.lastname,
-          community_id: registerData.community_id,
-          mobile: registerData.mobile,  
-          token: registerData.token,  
-        };
+        // const userFinalData = {
+        //   password: sha256Password,
+        //   firstname: registerData.firstname,
+        //   lastname: registerData.lastname,
+        //   community_id: registerData.community_id,
+        //   mobile: registerData.mobile,  
+        //   token: registerData.token,  
+        // };
 
-        saveToDevice(userData);
-        store.dispatch('setUser', registerData);
-        f7router.navigate('/sync-data/');
+        // saveToDevice(userFinalData);
+        // store.dispatch('setUser', registerData);
+        f7router.navigate('/login/');
+        f7.toast.show({
+          text: 'Registration Completed Successfully',
+          position: 'top',
+          closeTimeout: 2000,
+        });
       }
     } catch (error) {
       console.error('Error fetching data:', error);
-      setErrorMessage(error.code);
+      // setErrorMessage(error.code);
       f7.dialog.alert('Something went wrong. Please try again');
     }
 }
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     const { mobile, password, confirmpassword, community } = userData;
     if(!mobile.trim() || !firstName.trim() || !lastName.trim() || !password.trim() || !confirmpassword.trim() || !community.trim()){
       f7.dialog.alert('Fields cannot be left empty');
+      return;
     }
     if(password !== confirmpassword) {
       f7.dialog.alert('PINs provided do not match');
+      return;
     }
-    if(password.length !== 4 || !confirmpassword.length !== 4) {
+    if(mobile.length !== 10) {
+      f7.dialog.alert('Phone number must be 10 digits');
+      return;
+    }
+    if(password.length !== 4 || confirmpassword.length !== 4) {
       f7.dialog.alert('PINs must be 4 digits');
+      return;
     }
     else {
       const finalData = {
@@ -101,9 +117,11 @@ export default function Signup({ f7router }) {
         community,
         pin:true,
       };
-
-      // console.log('finalData', finalData);
-      registerUser(finalData);
+      console.log('sign in finalData', finalData);
+      
+      setIsLoading(true);
+      await registerUser(finalData);
+      setIsLoading(false);
     }
   }
 
@@ -149,7 +167,7 @@ export default function Signup({ f7router }) {
                     {passwordVisible && (<button onClick={() => setPasswordVisible(!passwordVisible)} className="flex justify-center items-center absolute top-[0.5em] right-[10px] w-[1.5em] h-[1.5em]">
                       <FaEyeSlash className="text-slate-500" />
                     </button>)} */}
-                    <input value={userData.password} onChange={handleChange} name="password" placeholder="Enter password" type="number" className="rounded w-full h-full" />
+                    <input value={userData.password} onChange={handleChange} name="password" placeholder="Enter PIN" type="number" className="rounded w-full h-full" />
                   </div>
                 </div>
                 <div className="w-full">
@@ -184,7 +202,7 @@ export default function Signup({ f7router }) {
           </div>
           <div className="mt-2">
             <button onClick={handleRegister} className="flex justify-center items-center w-full h-[2.5em] rounded bg-primary">
-              <h6 className="text-base font-semibold text-white">Register</h6>
+              <h6 className="text-base font-semibold text-white">{ isLoading ? '...loading' : 'Register' }</h6>
             </button>
             <div className="flex justify-center mt-1">
               <div className="text-[0.95em]">  

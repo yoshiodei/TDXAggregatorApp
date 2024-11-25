@@ -3,15 +3,18 @@ import { AiOutlineFileSync } from "react-icons/ai";
 import { IoCloudOfflineOutline } from "react-icons/io5";
 import { FaCheck } from "react-icons/fa";
 import {
+    f7,
     Page
   } from 'framework7-react'
 import axios from 'axios';
 import store from '../js/store'; 
 
 export default function SyncData({ f7router }) {
+  console.log('authorized user', store.state.user);
   const [errorMessage, setErrorMessage] = useState('');
   const [userMilestone, setUserMilestone] = useState({});
   const [commodityList, setCommodityList] = useState({});
+  const [communityList, setCommunityList] = useState({});
   const [siloList, setSiloList] = useState({});
   const [loading, setLoading] = useState(false);
 
@@ -29,6 +32,7 @@ export default function SyncData({ f7router }) {
       );
       const siloData = response.data;
       if(!errorMessage){
+        console.log('silo synced');
         localStorage.setItem('silos', JSON.stringify(siloData));
       }
       setErrorMessage('');
@@ -39,6 +43,32 @@ export default function SyncData({ f7router }) {
       f7.dialog.alert('Unable to fetch data');
     }
   }
+
+  const fetchCommunity = async () => {
+    try {
+      const response = await axios.post(
+        `https://torux.app/api/user/communities/${store.state.user.token}`,
+        {}, // This is the request body, currently empty
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${store.state.user.access_token}`,
+          },
+        }
+      );
+      const communityData = response.data;
+      if(!errorMessage){
+        console.log('community synced');
+        localStorage.setItem('communities', JSON.stringify(communityData));
+      }
+      setErrorMessage('');
+      setCommunityList(communityData);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setErrorMessage(error.code);
+      f7.dialog.alert('Unable to fetch data');
+    }
+}
 
   const fetchCommodity = async () => {
     try {
@@ -116,6 +146,7 @@ const saveDataToDevice = (milestone) => {
 const syncData = async () => {
   setLoading(true);
   await fetchCommodity();
+  await fetchCommunity();
   await fetchSilo();
   await fetchUserBalance();
   setLoading(false);

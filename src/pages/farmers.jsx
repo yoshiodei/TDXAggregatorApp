@@ -15,7 +15,7 @@ export default function Farmers({ f7router }) {
   return (
     <Page name="home">
       <div className="relative w-full flex flex-col h-screen overflow-hidden">
-        <Navbar  title="Farmers" goBack={false} f7router={f7router}/>
+        <Navbar  title="Farmers" goBack={false} f7router={f7router} />
         <div className="flex-1 w-full flex flex-col justify-between bg-background-primary">
           <div className="h-[6em] px-5 flex flex-col gap-y-1 justify-center">
             <div className="h-[1.5em] flex justify-between items-center">

@@ -37,7 +37,7 @@ export default function Navbar({f7router, goBack, title, menu}) {
 
   const handleLogout = () => {
     store.dispatch('resetState');
-    popupOpened(false);
+    setPopupOpened(false);
     f7router.navigate('/');
   };
 

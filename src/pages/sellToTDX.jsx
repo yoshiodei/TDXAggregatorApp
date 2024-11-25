@@ -24,6 +24,7 @@ export default function SellToTDX({ f7router }) {
 
   const [commodityPrice ,setCommodityPrice] = useState({});
   const [priceLoading ,setPriceLoading] = useState(false);
+  const [commodityRate, setCommodityRate] = useState([]);
   
   const fetchCommodity = async () => {
     try {
@@ -171,9 +172,33 @@ export default function SellToTDX({ f7router }) {
     }
 }
 
+const fetchCommodityRate = async () => {
+  try {
+    const response = await axios.post(
+      `https://torux.app/api/user/commodityrates/${store.state.user.token}`,
+      {}, // This is the request body, currently empty
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${store.state.user.access_token}`,
+        },
+      }
+    );
+    const rateData = response.data;
+    console.log('rate Data', rateData);
+    setErrorMessage('');
+    setCommodityRate(rateData);
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    setErrorMessage(error.code);
+    f7.dialog.alert('Unable to fetch data');
+  }
+}
+
 const loadPrice = async () => {
   setPriceLoading(true);
   calculatePrice();
+  fetchCommodityRate();
   setPriceLoading(false);
 };
 
@@ -184,7 +209,7 @@ useEffect(() => {
   return (
     <Page name="home">
     <div className="relative w-full flex flex-col h-screen overflow-hidden">
-      <Navbar  title="Sell to TDX" goBack={false} f7router={f7router} menu={true}/>
+      <Navbar  title="Sell to TDX" goBack={true} f7router={f7router} menu={true}/>
 
       <div className="flex-1 w-full sm:p-5 p-3 flex flex-col justify-between gap-y-5 bg-background-primary">
         <div>
@@ -303,90 +328,27 @@ useEffect(() => {
           </button>
         </div>
         <div className="px-3 pt-3 pb-[6em] h-full overflow-scroll">
-          <div>  
-            <div className="flex justify-between gap-x-1 h-[5em] items-center" >
-              <div className="h-[2em] w-[2em] sm:h-[3em] sm:w-[3em] rounded-full bg-slate-50"></div>
-              <div>
-                <h6 className="text-white text-[1em] font-bold">Yellow maize</h6>
-                <p className="text-primary text-[0.9em]">Last updated: 2/8/2024</p>
-              </div>
-              <div>
-                <h6 className="text-white mb-1 text-[0.9em] font-semibold">27₵/KG</h6>  
-                <h6 className="rounded bg-primary px-[5px] py-[1px] text-white">+4₵</h6>
-              </div>
-            </div>
-            <div className="w-full h-[1px] border-b border-slate-700" />  
-          </div>
-          <div>  
-            <div className="flex justify-between gap-x-1 h-[5em] items-center" >
-              <div className="h-[2em] w-[2em] sm:h-[3em] sm:w-[3em] rounded-full bg-slate-50"></div>
-              <div>
-                <h6 className="text-white text-[1em] font-bold">Yellow maize</h6>
-                <p className="text-primary text-[0.9em]">Last updated: 2/8/2024</p>
-              </div>
-              <div>
-                <h6 className="text-white mb-1 text-[0.9em] font-semibold">27₵/KG</h6>  
-                <h6 className="rounded bg-primary px-[5px] py-[1px] text-white">+4₵</h6>
-              </div>
-            </div>
-            <div className="w-full h-[1px] border-b border-slate-700" />  
-          </div>
-          <div>  
-            <div className="flex justify-between gap-x-1 h-[5em] items-center" >
-              <div className="h-[2em] w-[2em] sm:h-[3em] sm:w-[3em] rounded-full bg-slate-50"></div>
-              <div>
-                <h6 className="text-white text-[1em] font-bold">Yellow maize</h6>
-                <p className="text-primary text-[0.9em]">Last updated: 2/8/2024</p>
-              </div>
-              <div>
-                <h6 className="text-white mb-1 text-[0.9em] font-semibold">27₵/KG</h6>  
-                <h6 className="rounded bg-primary px-[5px] py-[1px] text-white">+4₵</h6>
-              </div>
-            </div>
-            <div className="w-full h-[1px] border-b border-slate-700" />  
-          </div>
-          <div>  
-            <div className="flex justify-between gap-x-1 h-[5em] items-center" >
-              <div className="h-[2em] w-[2em] sm:h-[3em] sm:w-[3em] rounded-full bg-slate-50"></div>
-              <div>
-                <h6 className="text-white text-[1em] font-bold">Yellow maize</h6>
-                <p className="text-primary text-[0.9em]">Last updated: 2/8/2024</p>
-              </div>
-              <div>
-                <h6 className="text-white mb-1 text-[0.9em] font-semibold">27₵/KG</h6>  
-                <h6 className="rounded bg-primary px-[5px] py-[1px] text-white">+4₵</h6>
-              </div>
-            </div>
-            <div className="w-full h-[1px] border-b border-slate-700" />  
-          </div>
-          <div>  
-            <div className="flex justify-between gap-x-1 h-[5em] items-center" >
-              <div className="h-[2em] w-[2em] sm:h-[3em] sm:w-[3em] rounded-full bg-slate-50"></div>
-              <div>
-                <h6 className="text-white text-[1em] font-bold">Yellow maize</h6>
-                <p className="text-primary text-[0.9em]">Last updated: 2/8/2024</p>
-              </div>
-              <div>
-                <h6 className="text-white mb-1 text-[0.9em] font-semibold">27₵/KG</h6>  
-                <h6 className="rounded bg-primary px-[5px] py-[1px] text-white">+4₵</h6>
-              </div>
-            </div>
-            <div className="w-full h-[1px] border-b border-slate-700" />  
-          </div>
-          <div>  
-            <div className="flex justify-between gap-x-1 h-[5em] items-center" >
-              <div className="h-[2em] w-[2em] sm:h-[3em] sm:w-[3em] rounded-full bg-slate-50"></div>
-              <div>
-                <h6 className="text-white text-[1em] font-bold">Yellow maize</h6>
-                <p className="text-primary text-[0.9em]">Last updated: 2/8/2024</p>
-              </div>
-              <div>
-                <h6 className="text-white mb-1 text-[0.9em] font-semibold">27₵/KG</h6>  
-                <h6 className="rounded bg-primary px-[5px] py-[1px] text-white">+4₵</h6>
-              </div>
-            </div>
-            <div className="w-full h-[1px] border-b border-slate-700" />  
-          </div>
+          {(commodityRate?.length === 0) && (<div className="w-full h-full flex just-center mt-5">
+            <h6 className="text-center font-bold text-slate-300">There are no price rates to show</h6>  
+          </div>)}
+          {commodityRate?.map((rate) => (
+             <div>  
+             <div className="flex justify-between gap-x-1 h-[5em] items-center" >
+               <div className="h-[2em] w-[2em] sm:h-[3em] sm:w-[3em] rounded-full bg-slate-50"></div>
+               <div>
+                 <h6 className="text-white text-[1em] font-bold">Yellow Maize</h6>
+                 <p className="text-primary text-[0.9em]">Last updated: 2/8/2024</p>
+               </div>
+               <div>
+                 <h6 className="text-white mb-1 text-[0.9em] font-semibold">27₵/KG</h6>  
+                 <h6 className="rounded bg-primary px-[5px] py-[1px] text-white">+4₵</h6>
+               </div>
+             </div>
+             <div className="w-full h-[1px] border-b border-slate-700" />  
+           </div>
+          ))
+          }
+
         </div>
       </div>
 
