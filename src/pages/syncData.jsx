@@ -45,14 +45,14 @@ export default function SyncData({ f7router }) {
   }
 
   const fetchCommunity = async () => {
+    // `https://torux.app/api/communities/${store.state.user.token}`,
     try {
       const response = await axios.post(
-        `https://torux.app/api/user/communities/${store.state.user.token}`,
+        `https://torux.app/api/communities`,
         {}, // This is the request body, currently empty
         {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${store.state.user.access_token}`,
           },
         }
       );
