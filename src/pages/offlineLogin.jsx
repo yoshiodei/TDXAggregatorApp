@@ -22,14 +22,14 @@ export default function OfflineLogin({ f7router }){
     const existingUsers = JSON.parse(localStorage.getItem('users'));
 
     if(existingUsers.length === 0){
-        f7.dialog.alert('No data available.');
+        f7.dialog.alert('No data available.','');
     }
     if ( !phone || !password ){
-      f7.dialog.alert('Fields cannot be left empty');
+      f7.dialog.alert('Fields cannot be left empty','');
     }
     if(phone && password){
         const matchedUser = findUserByNumber(existingUsers, phone);
-        if(!matchedUser){ f7.dialog.alert('User is not available in offline mode. Please try again.'); }
+        if(!matchedUser){ f7.dialog.alert('User is not available in offline mode. Please try again.',''); }
         if(matchedUser.mobile){
           const sha256Password = CryptoJS.SHA256(credentials.password).toString();
             if(sha256Password === matchedUser.password){
@@ -37,7 +37,7 @@ export default function OfflineLogin({ f7router }){
               console.log('offline user', matchedUser); 
               f7router.navigate('/offline-dashboard/');    
             } else {
-              f7.dialog.alert('User is not available in offline mode. Please try again.')
+              f7.dialog.alert('User is not available in offline mode. Please try again.','')
             }
         }
     }

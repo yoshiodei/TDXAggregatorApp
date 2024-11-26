@@ -49,7 +49,7 @@ export default function SellToTDX({ f7router }) {
     } catch (error) {
       console.error('Error fetching data:', error);
       setErrorMessage(error.code);
-      f7.dialog.alert('Unable to fetch data');
+      f7.dialog.alert('Unable to fetch data','');
     }
 }
 
@@ -72,7 +72,7 @@ export default function SellToTDX({ f7router }) {
     } catch (error) {
       console.error('Error fetching data:', error);
       setErrorMessage(error.code);
-      f7.dialog.alert('Unable to fetch data');
+      f7.dialog.alert('Unable to fetch data','');
     }
 }
 
@@ -95,7 +95,7 @@ export default function SellToTDX({ f7router }) {
     } catch (error) {
       console.error('Error fetching data:', error);
       // setErrorMessage(error.code);
-      f7.dialog.alert('Unable to fetch data');
+      f7.dialog.alert('Unable to fetch data','');
     }
 }
 
@@ -118,7 +118,7 @@ export default function SellToTDX({ f7router }) {
     } catch (error) {
       console.error('Error fetching data:', error);
       // setErrorMessage(error.code);
-      f7.dialog.alert('Unable to fetch data');
+      f7.dialog.alert('Unable to fetch data','');
     }
 }
 
@@ -131,7 +131,7 @@ export default function SellToTDX({ f7router }) {
 
   const handleSubmit = () => {
     if(!commodityValue){
-      f7.dialog.alert('Please select a commodity');
+      f7.dialog.alert('Please select a commodity','');
       return null;
     }
     if(!siloValue){
@@ -139,7 +139,7 @@ export default function SellToTDX({ f7router }) {
       return null;
     }
     if(!weight){
-      f7.dialog.alert('Weight field cannot be empty');
+      f7.dialog.alert('Weight field cannot be empty','');
       return null;
     }
     if (weight && siloValue && commodityValue ){
@@ -172,7 +172,7 @@ export default function SellToTDX({ f7router }) {
     } catch (error) {
       console.error('Error fetching data:', error);
       setErrorMessage(error.code);
-      f7.dialog.alert('Unable to fetch data');
+      f7.dialog.alert('Unable to fetch data','');
     }
 }
 
@@ -195,7 +195,7 @@ const fetchCommodityRate = async () => {
   } catch (error) {
     console.error('Error fetching data:', error);
     setErrorMessage(error.code);
-    f7.dialog.alert('Unable to fetch data');
+    f7.dialog.alert('Unable to fetch data','');
   }
 }
 

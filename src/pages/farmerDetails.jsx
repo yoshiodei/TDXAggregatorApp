@@ -72,7 +72,7 @@ export default function FarmerDetails({ f7router }) {
     } catch (error) {
       console.error('Error fetching data:', error);
       setErrorMessage(error.code);
-      f7.dialog.alert('Unable to fetch data');
+      f7.dialog.alert('Unable to fetch data','');
     }
 }
 
@@ -94,7 +94,7 @@ const verifyMomoNumber = async () => {
     const momoData = response.data;
     console.log('momo data', momoData);
     if(momoData.error){
-      f7.dialog.alert('This number was not found');
+      f7.dialog.alert('This number was not found','');
     }
     else{
       setMomoNumber({ message:momoData.message, number:momoData.number });
@@ -104,7 +104,7 @@ const verifyMomoNumber = async () => {
   } catch (error) {
     console.error('Error fetching data:', error);
     setErrorMessage(error.code);
-    f7.dialog.alert('Unable to fetch data');
+    f7.dialog.alert('Unable to fetch data','');
   }
 }
 
@@ -123,12 +123,12 @@ const fetchFarmer = async () => {
     const farmerData = response.data;
     console.log('farmer data', farmerData);
     if(farmerData.error == 'No user found'){
-      f7.dialog.alert('No user found');
+      f7.dialog.alert('No user found','');
     }
     setFarmer(farmerData);
   } catch (error) {
     console.error('Error fetching data:', error);
-    f7.dialog.alert('Unable to fetch data');
+    f7.dialog.alert('Unable to fetch data','');
   }
 }
 
@@ -147,14 +147,14 @@ const completeOrder = async (farmerDataObj) => {
     const orderData = response.data;
     console.log('order data', orderData);
     if(orderData.error){
-      f7.dialog.alert(orderData.message);
+      f7.dialog.alert(orderData.message,'');
     }
     else {
     f7router.navigate('/sale-complete/');
     }
   } catch (error) {
     console.error('Error fetching data:', error);
-    f7.dialog.alert('Unable to submit order. Please try again.');
+    f7.dialog.alert('Unable to submit order. Please try again.','');
   }
 }
 
@@ -165,7 +165,7 @@ const completeOrder = async (farmerDataObj) => {
 
   const handleSearch = async () => {
     if(phone.trim().length !== 10){
-      f7.dialog.alert('Phone number is no up to 10 digits.')
+      f7.dialog.alert('Phone number is no up to 10 digits.','')
     }
     else{
       setIsLoadingMomo(true);

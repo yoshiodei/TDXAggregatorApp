@@ -19,7 +19,7 @@ export default function OfflineSellToTDX({ f7router }) {
     const commoditiesArray = JSON.parse(localStorage.getItem('commodities'));
     
     if(!silosArray?.length || !commoditiesArray?.length){
-      f7.dialog.alert('Data not available');
+      f7.dialog.alert('Data not available','');
     } else {
       setCommodityList(commoditiesArray);
       setSiloList(silosArray);
@@ -32,11 +32,11 @@ export default function OfflineSellToTDX({ f7router }) {
 
   const handleSubmit = () => {
     if(!commodityValue || !siloValue || !weight || !weight){
-      f7.dialog.alert('Fields cannot be left empty');
+      f7.dialog.alert('Fields cannot be left empty','');
       return;    
     }
     if(farmerNumber.length !== 10){
-      f7.dialog.alert('Farmer number is less than 10 digits');
+      f7.dialog.alert('Farmer number is less than 10 digits','');
       return;
     } else {  
       const id = nanoid();
@@ -63,7 +63,7 @@ export default function OfflineSellToTDX({ f7router }) {
 
         console.log('updated user list', updatedUserList);
         if(!updatedUserList?.length){
-          f7.dialog.alert('Upate user error.');
+          f7.dialog.alert('Upate user error.','');
           return;
         }
 
@@ -82,7 +82,7 @@ export default function OfflineSellToTDX({ f7router }) {
 
         console.log('updated user list', updatedUserList);
         if(!updatedUserList?.length){
-          f7.dialog.alert('Upate user error.');
+          f7.dialog.alert('Upate user error.','');
           return;
         }
 

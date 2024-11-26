@@ -59,7 +59,7 @@ export default function Signup({ f7router }) {
       const registerData = response.data;
       console.log('register Data', registerData);
       if(registerData.error){
-        f7.dialog.alert(registerData.message);
+        f7.dialog.alert(registerData.message,'');
       }else{
         // const sha256Password = CryptoJS.SHA256(userData.password).toString();
         // console.log('hashed password', sha256Password);
@@ -85,26 +85,26 @@ export default function Signup({ f7router }) {
     } catch (error) {
       console.error('Error fetching data:', error);
       // setErrorMessage(error.code);
-      f7.dialog.alert('Something went wrong. Please try again');
+      f7.dialog.alert('Something went wrong. Please try again','');
     }
 }
 
   const handleRegister = async () => {
     const { mobile, password, confirmpassword, community } = userData;
     if(!mobile.trim() || !firstName.trim() || !lastName.trim() || !password.trim() || !confirmpassword.trim() || !community.trim()){
-      f7.dialog.alert('Fields cannot be left empty');
+      f7.dialog.alert('Fields cannot be left empty','');
       return;
     }
     if(password !== confirmpassword) {
-      f7.dialog.alert('PINs provided do not match');
+      f7.dialog.alert('PINs provided do not match','');
       return;
     }
     if(mobile.length !== 10) {
-      f7.dialog.alert('Phone number must be 10 digits');
+      f7.dialog.alert('Phone number must be 10 digits','');
       return;
     }
     if(password.length !== 4 || confirmpassword.length !== 4) {
-      f7.dialog.alert('PINs must be 4 digits');
+      f7.dialog.alert('PINs must be 4 digits','');
       return;
     }
     else {

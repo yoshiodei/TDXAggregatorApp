@@ -25,7 +25,7 @@ export default function CompleteTransaction({ f7route, f7router }) {
   const getTransactionById = async() => {
     const transactionData = findTransaction();
     console.log('transaction data', transactionData);
-    if(!transactionData?.id){ f7.dialog.alert('Transaction data not found'); }
+    if(!transactionData?.id){ f7.dialog.alert('Transaction data not found',''); }
     else { 
       await calculatePrice(transactionData.commodity.split(', ')[0], transactionData.quantity);  
       setTransaction(transactionData); 
@@ -36,7 +36,7 @@ export default function CompleteTransaction({ f7route, f7router }) {
 
   const getSiloValue = (siloid) => {
     const siloData = JSON.parse(localStorage.getItem('silos')) || [];
-    if(!siloData?.length){ f7.dialog.alert('Unable to fetch silo data') }
+    if(!siloData?.length){ f7.dialog.alert('Unable to fetch silo data','') }
     else{
       const data = siloData.find((silo) => silo.token === siloid) || null;
       setSiloValue(data.siloname);
@@ -45,7 +45,7 @@ export default function CompleteTransaction({ f7route, f7router }) {
 
   const getCommunityValue = async(communityid) => {
     const communityData = JSON.parse(localStorage.getItem('communities')) || [];
-    if(!communityData?.length){ f7.dialog.alert('Unable to fetch community data') }
+    if(!communityData?.length){ f7.dialog.alert('Unable to fetch community data','') }
     else{
       const data = communityData.find((community) => community.id === communityid) || null;
       setCommunityValue(data.name);
@@ -74,7 +74,7 @@ export default function CompleteTransaction({ f7route, f7router }) {
     } catch (error) {
       console.error('Error fetching data:', error);
     //   setErrorMessage(error.code);
-      f7.dialog.alert('Unable to fetch price data');
+      f7.dialog.alert('Unable to fetch price data','');
     }
 }
 
@@ -99,7 +99,7 @@ const verifyMomoNumber = async (mobile) => {
       if(momoData.error){
         console.log('mobile number', mobile);
         console.log('fff', detectNetwork(mobile, mobileNetworks));
-        f7.dialog.alert('This number was not found');
+        f7.dialog.alert('This number was not found','');
       }
       else{
         setMomoNumber({ message:momoData.message, number:momoData.number });
@@ -109,13 +109,13 @@ const verifyMomoNumber = async (mobile) => {
     } catch (error) {
       console.error('Error fetching data:', error);
     //   setErrorMessage(error.code);
-      f7.dialog.alert('Unable to fetch data');
+      f7.dialog.alert('Unable to fetch data','');
     }
   }
 
   const handleSearch = async () => {
     if(transaction.mobile.length !== 10){
-      f7.dialog.alert('Phone number is no up to 10 digits.')
+      f7.dialog.alert('Phone number is no up to 10 digits.','')
     }
     else{
       setIsLoadingMomo(true);
@@ -131,7 +131,7 @@ const verifyMomoNumber = async (mobile) => {
   const handleDelete = () => {
     const existingUsers = JSON.parse(localStorage.getItem('users')) || [];
     if(!existingUsers?.length){
-      f7.dialog.alert('Unable to find saved users');
+      f7.dialog.alert('Unable to find saved users','');
     }else{
       const userData = findUserByNumber(existingUsers, store.state.user.mobile);  
       const newTransactions = userData.pendingTransactions.filter((transactionObj) => (
@@ -154,7 +154,7 @@ const verifyMomoNumber = async (mobile) => {
   const removeTransactionDetail = () => {
     const existingUsers = JSON.parse(localStorage.getItem('users')) || [];
     if(!existingUsers?.length){
-      f7.dialog.alert('Unable to find saved users');
+      f7.dialog.alert('Unable to find saved users','');
     } else {
       const userData = findUserByNumber(existingUsers, store.state.user.mobile);  
       const newTransactions = userData.pendingTransactions.filter((transactionObj) => (
@@ -204,7 +204,7 @@ const verifyMomoNumber = async (mobile) => {
       const orderData = response.data;
       console.log('order data', orderData);
       if(orderData.error){
-        f7.dialog.alert(orderData.message);
+        f7.dialog.alert(orderData.message,'');
       }
       else {
         removeTransactionDetail();
@@ -212,7 +212,7 @@ const verifyMomoNumber = async (mobile) => {
       }
     } catch (error) {
       console.error('Error fetching data:', error);
-      f7.dialog.alert('Unable to submit order. Please try again.');
+      f7.dialog.alert('Unable to submit order. Please try again.','');
     }
   }
 

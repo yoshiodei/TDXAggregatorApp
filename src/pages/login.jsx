@@ -23,7 +23,7 @@ export default function Login({ f7router }) {
     setLoading(true);
 
     if ( !phone || !password ){
-      f7.dialog.alert('Fields cannot be left empty');
+      f7.dialog.alert('Fields cannot be left empty','');
       setLoading(false);
     }
     if(phone && password){
@@ -44,7 +44,7 @@ export default function Login({ f7router }) {
         }
     } catch (error) {
       console.error('Error getting challenge', error);
-      f7.dialog.alert('Error fetching user');
+      f7.dialog.alert('Error fetching user','');
     }
 };
 
@@ -78,7 +78,7 @@ const hashHMAC = (message, key) => {
     } else {
        const offlineUserData = findUserByNumber(existingUsers, data.mobile);
        if(!offlineUserData?.mobile){
-        //  f7.dialog.alert('Unable to fetch offline data');
+        //  f7.dialog.alert('Unable to fetch offline data','');
          return data;
        }else {
          return {...data, pendingTransactions: (offlineUserData.pendingTransactions || [])}
@@ -114,11 +114,11 @@ const hashHMAC = (message, key) => {
             } else {
                 console.log('response', response);
                 console.log('user data', result);
-                f7.dialog.alert('Incorrect Phone Number or Password.');
+                f7.dialog.alert('Incorrect Phone Number or Password.','');
             }
         } catch (error) {
             console.error('Error validating response', error);
-            f7.dialog.alert('Something went wrong. Try again later');
+            f7.dialog.alert('Something went wrong. Try again later','');
         }
   }
 
