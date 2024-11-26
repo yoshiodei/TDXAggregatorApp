@@ -36,6 +36,7 @@ export default function Login({ f7router }) {
     try {
         const response = await axios.post(`https://torux.app/api/get_challenge/${credentials.phone}`, {});
         if (response.data.challenge) {
+          console.log('challenge data', response.data.challenge);
           setChallenge(response.data.challenge);
           validateUser(response.data.challenge);
         } else {
@@ -50,7 +51,6 @@ export default function Login({ f7router }) {
 const hashHMAC = (message, key) => {
   return CryptoJS.HmacSHA256(message, key).toString(CryptoJS.enc.Hex);
 };
-
 
   const handleLogin = async () => {
     await getChallenge();
@@ -78,8 +78,8 @@ const hashHMAC = (message, key) => {
     } else {
        const offlineUserData = findUserByNumber(existingUsers, data.mobile);
        if(!offlineUserData?.mobile){
-         f7.dialog.alert('Unable to fetch offline data');
-         return {};
+        //  f7.dialog.alert('Unable to fetch offline data');
+         return data;
        }else {
          return {...data, pendingTransactions: (offlineUserData.pendingTransactions || [])}
        }

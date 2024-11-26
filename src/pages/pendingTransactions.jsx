@@ -14,9 +14,9 @@ export default function PendingTransactions({ f7router }) {
   if(pendingTransactionsList?.length === 0){
     return(
       <Page name="home"> 
-        <div className="h-[100vh] w-[100vw] bg-background-primary p-2 sm:p-5 relative">
-          <Navbar title="Pending Transactions" menu={true} />
-          <h6 className="mt-8 text-[1.2em] font-bold text-slate-400 text-center">There are no pending transaction</h6>    
+        <div className="h-[100vh] w-[100vw] bg-background-primary relative">
+          <Navbar f7router={f7router} title="Pending Transactions" menu={true} />
+          <h6 className="mt-8 text-[1.2em] font-bold text-slate-400 text-center p-2 sm:p-5">There are no pending transaction</h6>    
         </div>
       </Page>  
     )

@@ -17,6 +17,8 @@ export default function CompleteTransaction({ f7route, f7router }) {
   const [siloValue, setSiloValue] = useState({});
 
   const findTransaction = () => {
+    console.log('user state at fetching transaction:', store.state?.user?.pendingTransactions);
+    console.log('the id', id);
     return store.state?.user?.pendingTransactions?.find((transaction) => transaction.id === id) || null;
   };
 
@@ -26,9 +28,9 @@ export default function CompleteTransaction({ f7route, f7router }) {
     if(!transactionData?.id){ f7.dialog.alert('Transaction data not found'); }
     else { 
       await calculatePrice(transactionData.commodity.split(', ')[0], transactionData.quantity);  
+      setTransaction(transactionData); 
       getSiloValue(transactionData.siloid);
       getCommunityValue(transactionData.community_id);
-      setTransaction(transactionData) 
     };
   }
 
@@ -41,7 +43,7 @@ export default function CompleteTransaction({ f7route, f7router }) {
     }
   };
 
-  const getCommunityValue = (communityid) => {
+  const getCommunityValue = async(communityid) => {
     const communityData = JSON.parse(localStorage.getItem('communities')) || [];
     if(!communityData?.length){ f7.dialog.alert('Unable to fetch community data') }
     else{
@@ -66,7 +68,7 @@ export default function CompleteTransaction({ f7route, f7router }) {
         }
       );
       const priceData = response.data;
-    //   console.log('price Data', priceData);
+      console.log('pending error check 003: response on calcPrice,', priceData);
     //   setErrorMessage('');
       setCommodityPrice(priceData);
     } catch (error) {
@@ -77,6 +79,7 @@ export default function CompleteTransaction({ f7route, f7router }) {
 }
 
 const verifyMomoNumber = async (mobile) => {
+    console.log('pending error check: mobile param on verify momo,', mobile);
     try {
       const response = await axios.post(
         `https://torux.app/api/user/momonamelookup/${store.state.user.token}`,
@@ -92,7 +95,7 @@ const verifyMomoNumber = async (mobile) => {
         }
       );
       const momoData = response.data;
-      console.log('momo data', momoData);
+      console.log('pending error check: verify momo response,', momoData);
       if(momoData.error){
         console.log('mobile number', mobile);
         console.log('fff', detectNetwork(mobile, mobileNetworks));

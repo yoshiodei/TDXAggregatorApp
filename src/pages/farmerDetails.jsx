@@ -8,6 +8,12 @@ import store from '../js/store';
 import axios from 'axios';
 import { detectNetwork } from '../config/util';
 import { mobileNetworks } from '../config/constant';
+import maizeIcon from '../assets/maize-white.png';
+import peanutIcon from '../assets/peanut-white.png';
+import seasameSeedIcon from '../assets/sesame-seed-white.png';
+import sheaNutIcon from '../assets/shea-nut-white.png';
+import sorghumIcon from '../assets/sorghum-white.png';
+import soybeanIcon from '../assets/soybean-white.png';
 
 export default function FarmerDetails({ f7router }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -17,6 +23,32 @@ export default function FarmerDetails({ f7router }) {
   const [phone, setPhone] = useState('');
   const [momoNumber, setMomoNumber] = useState({ message: '', number: '' });
   const [farmer, setFarmer] = useState({});
+
+  const findIcon = (commodity_name) => {
+    let iconValue;
+    switch (commodity_name) {
+      case 'Soya Beans': iconValue = soybeanIcon;
+      break;
+      case 'Yellow Maize': iconValue = maizeIcon;
+      break;
+      case 'Sorghum ': iconValue = sorghumIcon;
+      break;
+      case 'White maize': iconValue = maizeIcon;
+      break;
+      case 'Shea nuts': iconValue = sheaNutIconIcon;
+      break;
+      case 'Sesame Seeds': iconValue = seasameSeedIcon;
+      break;
+      case 'Peanut': iconValue = peanutIcon;
+      break;
+    
+      default:
+        iconValue = maizeIcon;
+        break;
+    }
+
+    return iconValue;
+  };
 
   const calculatePrice = async () => {
     try {
@@ -179,7 +211,9 @@ const completeOrder = async (farmerDataObj) => {
 
       <div className="bg-slate-900 flex justify-between items-center h-[6em] px-3 sm:px-5">
         <div className="flex gap-x-3">
-          <div className="sm:block hidden w-[40px] h-[40px] bg-slate-800 rounded-full" />
+          <div className="sm:block hidden w-[40px] h-[40px] rounded-full">
+            <img src={findIcon(store.state.saleData.commodity.split(", ")[1])} className="h-full w-full" alt="commodity icon" />
+          </div>  
           <div>
             <h6 className="font-bold text-white sm:text-base text-[0.9em]">{store.state.saleData.commodity.split(", ")[1]}</h6>  
             <h6 className="text-primary font-semibold sm:text-base text-[0.9em]">{`${commodityPrice.bags} bags, ${commodityPrice.weight} KG`}</h6>  

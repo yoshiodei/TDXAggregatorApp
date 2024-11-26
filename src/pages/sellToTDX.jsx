@@ -8,9 +8,13 @@ import {
   } from 'framework7-react';
 import axios from 'axios';
 import store from '../js/store';
+import TimeAgo from 'javascript-time-ago';
+import ReactTimeAgo from 'react-time-ago'; 
+import en from 'javascript-time-ago/locale/en'
 
 
 export default function SellToTDX({ f7router }) {
+  TimeAgo.addLocale(en);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const [commodityValue, setCommodityValue] = useState('');
@@ -331,22 +335,30 @@ useEffect(() => {
           {(commodityRate?.length === 0) && (<div className="w-full h-full flex just-center mt-5">
             <h6 className="text-center font-bold text-slate-300">There are no price rates to show</h6>  
           </div>)}
-          {commodityRate?.map((rate) => (
-             <div>  
-             <div className="flex justify-between gap-x-1 h-[5em] items-center" >
-               <div className="h-[2em] w-[2em] sm:h-[3em] sm:w-[3em] rounded-full bg-slate-50"></div>
-               <div>
-                 <h6 className="text-white text-[1em] font-bold">Yellow Maize</h6>
-                 <p className="text-primary text-[0.9em]">Last updated: 2/8/2024</p>
+          {commodityRate?.map((rate) => {
+              if(rate?.name){ 
+                return (<div key={rate.commodityId}>  
+             <div className="flex justify-between gap-x-1 min-h-[5em] items-center" >
+               <div className="h-[2em] w-[2em] sm:h-[3em] sm:w-[3em] rounded-full">
+                 <img src={rate.icon} className="h-full w-full" alt="commodity icon" /> 
                </div>
                <div>
-                 <h6 className="text-white mb-1 text-[0.9em] font-semibold">27₵/KG</h6>  
-                 <h6 className="rounded bg-primary px-[5px] py-[1px] text-white">+4₵</h6>
+                 <h6 className="text-white text-[1em] font-bold">{rate.name}</h6>
+                 <p className="text-primary text-[0.9em]">
+                   Last updated 
+                   {' '}
+                   <ReactTimeAgo date={new Date(commodityRate[6]?.last_synced)} locale="en-US"/>
+                 </p>
+               </div>
+               <div className='flex flex-col gap-y-1'>
+                 <h6 className="rounded bg-green-600 px-[5px] sm:py-[1px] text-white sm:text-base text-[0.9em]">₵ {rate.purchaseprice_high}</h6>  
+                 <h6 className="rounded bg-red-600 px-[5px] sm:py-[1px] text-white sm:text-base text-[0.9em]">₵ {rate.purchaseprice_low}</h6>
                </div>
              </div>
              <div className="w-full h-[1px] border-b border-slate-700" />  
-           </div>
-          ))
+           </div>)
+              }
+           })
           }
 
         </div>
