@@ -192,7 +192,8 @@ const completeOrder = async (farmerDataObj) => {
       commodity: store.state.saleData.commodity.split(", ")[0],
       community_id: store.state.user.community_id,
       siloid: store.state.saleData.siloid,
-      quantity: commodityPrice.weight,
+      // quantity: commodityPrice.weight,
+      quantity: store.state.saleData.quantity,
       bags: commodityPrice.bags,
       unit_price: commodityPrice.bagsrate,
       commodity_qc: '',
@@ -216,7 +217,7 @@ const completeOrder = async (farmerDataObj) => {
           </div>  
           <div>
             <h6 className="font-bold text-white sm:text-base text-[0.9em]">{store.state.saleData.commodity.split(", ")[1]}</h6>  
-            <h6 className="text-primary font-semibold sm:text-base text-[0.9em]">{`${commodityPrice.bags} bags, ${commodityPrice.weight} KG`}</h6>  
+            <h6 className="text-primary font-semibold sm:text-base text-[0.9em]">{`${commodityPrice.bags} bags, ${store.state.saleData.quantity} KG`}</h6>  
           </div>
         </div>
         <div>
