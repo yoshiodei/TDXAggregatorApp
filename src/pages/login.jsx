@@ -1,6 +1,7 @@
 import { Page, f7 } from 'framework7-react'
 import React, { useState } from 'react'
 import Navbar from '../components/navbar'
+import OTPInput from 'react-otp-input'
 import { FaEye } from 'react-icons/fa'
 import { FaEyeSlash } from "react-icons/fa";
 import CryptoJS, { crypto } from 'crypto-js';
@@ -12,23 +13,40 @@ export default function Login({ f7router }) {
   const [credentials, setCredentials] = useState({ phone: '', password: '' });
   const [challenge, setChallenge] = useState('');
   const [loading, setLoading] = useState(false);
+  const [otp, setOTP] = useState('');
+
 
   const handleChange = (e) => {
     const {name, value} = e.target;
-    setCredentials({ ...credentials, [name]:value }); 
+    console.log("name", name);
+    
+    if(name === 'password'){
+      if(value.length <= 4){
+        setCredentials({ ...credentials, [name]:value });
+      }
+    } else {
+      setCredentials({ ...credentials, [name]:value }); 
+    }
   }
 
   const handleSubmit = async () => {
-    const {phone, password} = credentials;
+    const {phone} = credentials;
     setLoading(true);
 
-    if ( !phone || !password ){
+    if ( !phone || !otp ){
       f7.dialog.alert('Fields cannot be left empty','');
       setLoading(false);
+      return;
     }
-    if(phone && password){
+    if ( otp.length !== 4 ){
+      f7.dialog.alert('PIN must be 4 digits','');
+      setLoading(false);
+      return;
+    }
+    if(phone && otp){
       await handleLogin();
       setLoading(false);
+      return;
     }
   }
 
@@ -87,7 +105,7 @@ const hashHMAC = (message, key) => {
   };
 
   const validateUser = async (challenge) => {
-       const sha256Password = CryptoJS.SHA256(credentials.password).toString();
+       const sha256Password = CryptoJS.SHA256(otp).toString();
        const response = hashHMAC(challenge, sha256Password);      
 
         try {
@@ -149,13 +167,8 @@ const hashHMAC = (message, key) => {
                 </div>
                 <div className="w-full">
                   <label className="text-[0.9em] font-bold text-slate-600 mb-1">PIN</label>
-                  <div className="rounded w-full h-[2.5em] bg-white relative ps-2 pe-[50px] border border-slate-200">
-                    {/* {!passwordVisible && (<button onClick={() => setPasswordVisible(!passwordVisible)} className="flex justify-center items-center absolute top-[0.5em] right-[10px] w-[1.5em] h-[1.5em]">
-                      <FaEye className="text-slate-500" />
-                    </button>)}
-                    {passwordVisible && (<button onClick={() => setPasswordVisible(!passwordVisible)} className="flex justify-center items-center absolute top-[0.5em] right-[10px] w-[1.5em] h-[1.5em]">
-                      <FaEyeSlash className="text-slate-500" />
-                    </button>)} */}
+
+                  {/* <div className="rounded w-full h-[2.5em] bg-white relative ps-2 pe-[50px] border border-slate-200">
                     <input
                       name="password"
                       value={credentials.password}
@@ -164,13 +177,43 @@ const hashHMAC = (message, key) => {
                       type="text"
                       className="rounded w-full h-full"
                     />
-                  </div>
+                  </div> */}
+
+                  <OTPInput 
+                    value={otp}
+                    onChange={(value) => setOTP(value)}
+                    numInputs={4}
+                    inputType="number"
+                    containerStyle={{
+                      display: 'flex',
+                      width: '100%',
+                      // backgroundColor: 'grey',
+                      justifyContent: 'space-between',
+                      columnGap: 15,
+                    }}
+                    inputStyle={{
+                      width: '22%',
+                      height: '2em',
+                      fontWeight: '800',
+                      fontSize: 22,
+                      color: 'dimgrey',
+                      borderRadius: 4,
+                      border: '1px solid lightgrey',
+                      backgroundColor: 'white',
+                    }}
+                    renderInput={(props) => <input {...props} />}
+                  />    
+
+
+
                 </div>
-                {/* <div className="flex justify-end w-full">
+
+                
+                <div className="flex justify-end w-full">
                   <button className="w-auto font-semibold text-primary text-[0.9em]" onClick={() => f7router.navigate('/forgot-password/')}>
-                    <h6>Forgot Password</h6>
+                    <h6>Forgot PIN</h6>
                   </button>  
-                </div> */}
+                </div>
           </div>
           </div>
           <div className="mt-2">

@@ -2,6 +2,7 @@ import { f7, Page } from 'framework7-react'
 import React, { useState, useEffect } from 'react'
 import Navbar from '../components/navbar'
 import { IoIosArrowDown } from 'react-icons/io'
+import OTPInput from 'react-otp-input'
 import { FaEye } from 'react-icons/fa'
 import { FaEyeSlash } from 'react-icons/fa'
 import CryptoJS, { crypto } from 'crypto-js';
@@ -16,6 +17,8 @@ export default function Signup({ f7router }) {
   const [isLoading, setIsLoading] = useState(false);
   const [lastName, setLastName] = useState('');
   const [communities, setCommunities] = useState([]);
+  const [pin, setPin] = useState('');
+  const [confirmPin, setConfirmPin] = useState('');
   
   const initialState = {
     fullname: '',
@@ -30,7 +33,13 @@ export default function Signup({ f7router }) {
 
   const handleChange = (e) => {
     const {value, name} = e.target;
-    setUserData({...userData, [name]: value});
+    if(name === 'confirmpassword' || name === 'password'){
+      if(value.length <= 4){
+        setUserData({...userData, [name]: value});
+      }
+    } else {
+      setUserData({...userData, [name]: value});
+    }
   };
 
   const saveToDevice = (dataObj) => {
@@ -61,20 +70,6 @@ export default function Signup({ f7router }) {
       if(registerData.error){
         f7.dialog.alert(registerData.message,'');
       }else{
-        // const sha256Password = CryptoJS.SHA256(userData.password).toString();
-        // console.log('hashed password', sha256Password);
-
-        // const userFinalData = {
-        //   password: sha256Password,
-        //   firstname: registerData.firstname,
-        //   lastname: registerData.lastname,
-        //   community_id: registerData.community_id,
-        //   mobile: registerData.mobile,  
-        //   token: registerData.token,  
-        // };
-
-        // saveToDevice(userFinalData);
-        // store.dispatch('setUser', registerData);
         f7router.navigate('/login/');
         f7.toast.show({
           text: 'Registration Completed Successfully',
@@ -90,12 +85,12 @@ export default function Signup({ f7router }) {
 }
 
   const handleRegister = async () => {
-    const { mobile, password, confirmpassword, community } = userData;
-    if(!mobile.trim() || !firstName.trim() || !lastName.trim() || !password.trim() || !confirmpassword.trim() || !community.trim()){
+    const { mobile, community } = userData;
+    if(!mobile.trim() || !firstName.trim() || !lastName.trim() || !pin.trim() || !confirmPin.trim() || !community.trim()){
       f7.dialog.alert('Fields cannot be left empty','');
       return;
     }
-    if(password !== confirmpassword) {
+    if(pin !== confirmPin) {
       f7.dialog.alert('PINs provided do not match','');
       return;
     }
@@ -103,7 +98,7 @@ export default function Signup({ f7router }) {
       f7.dialog.alert('Phone number must be 10 digits','');
       return;
     }
-    if(password.length !== 4 || confirmpassword.length !== 4) {
+    if(pin.length !== 4 || confirmPin.length !== 4) {
       f7.dialog.alert('PINs must be 4 digits','');
       return;
     }
@@ -111,8 +106,8 @@ export default function Signup({ f7router }) {
       const finalData = {
         fullname: `${firstName} ${lastName}`,
         mobile,
-        password,
-        confirmpassword,
+        pin,
+        confirmPin,
         deviceId:'',
         community,
         pin:true,
@@ -155,33 +150,71 @@ export default function Signup({ f7router }) {
                 <div className="w-full">
                   <label className="text-[0.9em] font-bold text-slate-600 mb-1">Phone Number</label>
                   <div className="rounded w-full h-[2.5em] bg-white relative px-2 border border-slate-200">
-                    <input value={userData.mobile} onChange={handleChange} name="mobile" min={0} placeholder="Enter phone number" type="number" className="rounded w-full h-full" />
+                    <input value={userData.mobile} onChange={handleChange} name="mobile" placeholder="Enter phone number" type="number" className="rounded w-full h-full" />
                   </div>
                 </div>
-                <div className="w-full">
+                
+              <div className="w-full">
                   <label className="text-[0.9em] font-bold text-slate-600 mb-1">Pin (4 digit pin)</label>
-                  <div className="rounded w-full h-[2.5em] bg-white relative ps-2 pe-[50px] border border-slate-200">
-                    {/* {!passwordVisible && (<button onClick={() => setPasswordVisible(!passwordVisible)} className="flex justify-center items-center absolute top-[0.5em] right-[10px] w-[1.5em] h-[1.5em]">
-                      <FaEye className="text-slate-500" />
-                    </button>)}
-                    {passwordVisible && (<button onClick={() => setPasswordVisible(!passwordVisible)} className="flex justify-center items-center absolute top-[0.5em] right-[10px] w-[1.5em] h-[1.5em]">
-                      <FaEyeSlash className="text-slate-500" />
-                    </button>)} */}
-                    <input value={userData.password} onChange={handleChange} name="password" placeholder="Enter PIN" type="number" className="rounded w-full h-full" />
-                  </div>
+                  {/* <div className="rounded w-full h-[2.5em] bg-white relative ps-2 pe-[50px] border border-slate-200">
+                    <input value={userData.password} onChange={handleChange} name="password" placeholder="Enter PIN" type="number" max={4} className="rounded w-full h-full" />
+                  </div> */}
+                  <OTPInput 
+                    value={pin}
+                    onChange={(value) => setPin(value)}
+                    numInputs={4}
+                    inputType="number"
+                    containerStyle={{
+                      display: 'flex',
+                      width: '100%',
+                      // backgroundColor: 'grey',
+                      justifyContent: 'space-between',
+                      columnGap: 15,
+                    }}
+                    inputStyle={{
+                      width: '22%',
+                      height: '2em',
+                      fontWeight: '800',
+                      fontSize: 22,
+                      color: 'dimgrey',
+                      borderRadius: 4,
+                      border: '1px solid lightgrey',
+                      backgroundColor: 'white',
+                    }}
+                    renderInput={(props) => <input {...props} />}
+                  />    
                 </div>
+
                 <div className="w-full">
                   <label className="text-[0.9em] font-bold text-slate-600 mb-1">Confirm Pin</label>
-                  <div className="rounded w-full h-[2.5em] bg-white relative ps-2 pe-[50px] border border-slate-200">
-                    {/* {!confirmPasswordVisible && (<button onClick={() => setConfirmPasswordVisible(!passwordVisible)} className="flex justify-center items-center absolute top-[0.5em] right-[10px] w-[1.5em] h-[1.5em]">
-                      <FaEye className="text-slate-500" />
-                    </button>)}
-                    {confirmPasswordVisible && (<button onClick={() => setConfirmPasswordVisible(!confirmPasswordVisible)} className="flex justify-center items-center absolute top-[0.5em] right-[10px] w-[1.5em] h-[1.5em]">
-                      <FaEyeSlash className="text-slate-500" />
-                    </button>)} */}
-                    <input value={userData.confirmpassword} onChange={handleChange} name="confirmpassword" placeholder="Enter password" type="number" className="rounded w-full h-full" />
-                  </div>
+                  {/* <div className="rounded w-full h-[2.5em] bg-white relative ps-2 pe-[50px] border border-slate-200">
+                    <input value={userData.confirmpassword} maxLength={4} onChange={handleChange} name="confirmpassword" placeholder="Enter PIN" type="number" className="rounded w-full h-full" />
+                  </div> */}
+                  <OTPInput 
+                    value={confirmPin}
+                    onChange={(value) => setConfirmPin(value)}
+                    numInputs={4}
+                    inputType="number"
+                    containerStyle={{
+                      display: 'flex',
+                      width: '100%',
+                      justifyContent: 'space-between',
+                      columnGap: 15,
+                    }}
+                    inputStyle={{
+                      width: '22%',
+                      height: '2em',
+                      fontWeight: '800',
+                      fontSize: 22,
+                      color: 'dimgrey',
+                      borderRadius: 4,
+                      border: '1px solid lightgrey',
+                      backgroundColor: 'white',
+                    }}
+                    renderInput={(props) => <input {...props} />}
+                  />   
                 </div>
+
                 <div className="w-full">
                   <label className="text-[0.9em] font-bold text-slate-600 mb-1">Community</label>
                   <div className="rounded bg-white h-[2.5em] w-full relative border border-slate-200">
@@ -197,7 +230,7 @@ export default function Signup({ f7router }) {
                     })}
                   </select> 
                 </div>
-          </div>
+              </div>
           </div>
           </div>
           <div className="mt-2">
