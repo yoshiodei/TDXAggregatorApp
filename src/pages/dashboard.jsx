@@ -11,7 +11,9 @@ import ReactTimeAgo from 'react-time-ago';
 import en from 'javascript-time-ago/locale/en'
 import bagIcon from '../assets/bag-icon.png'
 import scaleIcon from '../assets/scale-icon.png'
-import farmerIcon from '../assets/farmer-icon.png'
+import totalPaymentIcon from '../assets/received_amount.png'
+import pendingIcon from '../assets/pending_amount_icon.png'
+import { formatPrice } from '../config/util';
 
 const Dashboard = ({ f7router }) => {
   TimeAgo.addLocale(en);
@@ -31,7 +33,9 @@ const Dashboard = ({ f7router }) => {
         }
       );
       const milestoneData = response.data;
-      setUserBalance(milestoneData)
+      setUserBalance(milestoneData);
+      console.log('milestoneData ==>', milestoneData);
+      
       // setErrorMessage('');
       // setCommodityList(commodityData);
     } catch (error) {
@@ -60,7 +64,7 @@ const Dashboard = ({ f7router }) => {
               {' '}
               <ReactTimeAgo date={new Date(userBalance?.last_synced)} locale="en-US"/>
             </p>)}
-            <h2 className="text-[1.5em] sm:text-[2em] font-bold leading-tight">{`Ghc ${userBalance?.account_balance || 'N/A'}`}</h2>
+            <h2 className="text-[1.5em] sm:text-[2em] font-bold leading-tight">{`Ghc ${ formatPrice(userBalance?.account_balance) || 'N/A'}`}</h2>
             <h5 className="text-[0.95em] sm:text-[1.1em] font-semi-bold leading-tight">Available Balance</h5>
             <div className="flex justify-end">
               <button onClick={() => setTime(new Date().getMilliseconds())} className="flex justify-center items-center rounded-full bg-green-600 w-[1.6em] h-[1.6em]">
@@ -73,22 +77,19 @@ const Dashboard = ({ f7router }) => {
         <div className="flex flex-col justify-between flex-1 gap-y-14">
           <div className="flex flex-col gap-y-3">
 
-            <div className="h-[60px] rounded bg-white p-[5px] flex justify-between gap-x-2">
+            {/* <div className="h-[60px] rounded bg-white p-[5px] flex justify-between gap-x-2">
               <div className="w-[50px] h-[50px] p-[8px] rounded bg-slate-300 flex justify-center items-center">
-              <img src={farmerIcon} alt='bag icon' className='w-full h-full' />
+              <img src={totalPaymentIcon} alt='bag icon' className='w-full h-full' />
               </div>  
               <div className="flex-1 flex items-center">
                 <div>
-                  <h6 className="text-[0.85em] font-semibold">Total farmers onboarded</h6>
-                  <h4 className="font-semibold">{userBalance.total_users}</h4>
+                  <h6 className="text-[0.85em] font-semibold">Total payments received</h6>
+                  <h4 className="font-semibold">{formatPrice(userBalance.total_cost)}</h4>
                 </div>  
               </div>  
               <div className="flex items-center">
-                {/* <button className="bg-primary rounded-full text-white py-[1px] px-3 text-[0.85em] font-semibold">
-                  View
-                </button> */}
               </div>  
-            </div>  
+            </div>   */}
 
             <div className="h-[60px] rounded bg-white p-[5px] flex justify-between gap-x-2">
               <div className="w-[50px] h-[50px] p-[12px] rounded bg-slate-300 flex justify-center items-center">
@@ -97,7 +98,24 @@ const Dashboard = ({ f7router }) => {
               <div className="flex-1 flex items-center">
                 <div>
                   <h6 className="text-[0.85em] font-semibold">Total cash transaction</h6>
-                  <h4 className="font-semibold">{userBalance.total_cost}</h4>
+                  <h4 className="font-semibold">{formatPrice(userBalance.total_cost)}</h4>
+                </div>  
+              </div>  
+              <div className="flex items-center">
+                {/* <button className="bg-primary rounded-full text-white py-[1px] px-3 text-[0.85em] font-semibold">
+                  View
+                </button> */}
+              </div>  
+            </div>
+
+            <div className="h-[60px] rounded bg-white p-[5px] flex justify-between gap-x-2">
+              <div className="w-[50px] p-[12px] h-[50px] rounded bg-slate-300 flex justify-center items-center">
+                <img src={pendingIcon} alt='bag icon' className='w-full h-full' />
+              </div>  
+              <div className="flex-1 flex items-center">
+                <div>
+                  <h6 className="text-[0.85em] font-semibold">Remaining payments</h6>
+                  <h4 className="font-semibold">{formatPrice(userBalance.pending_balance)}</h4>
                 </div>  
               </div>  
               <div className="flex items-center">
