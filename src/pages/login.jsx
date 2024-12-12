@@ -14,11 +14,11 @@ export default function Login({ f7router }) {
   const [challenge, setChallenge] = useState('');
   const [loading, setLoading] = useState(false);
   const [otp, setOTP] = useState('');
+  const [pinIsHidden, setPinIsHidden] = useState(true);
 
 
   const handleChange = (e) => {
     const {name, value} = e.target;
-    console.log("name", name);
     
     if(name === 'password'){
       if(value.length <= 4){
@@ -140,6 +140,12 @@ const hashHMAC = (message, key) => {
         }
   }
 
+  const handleChangePin = (value) => {
+    if(!isNaN(Number(value))){    
+      setOTP(value)
+    }
+  }
+
   return (
     <Page name="login">
       <div className="w-full flex flex-col min-h-screen">
@@ -166,24 +172,16 @@ const hashHMAC = (message, key) => {
                   </div>
                 </div>
                 <div className="w-full">
-                  <label className="text-[0.9em] font-bold text-slate-600 mb-1">PIN</label>
-
-                  {/* <div className="rounded w-full h-[2.5em] bg-white relative ps-2 pe-[50px] border border-slate-200">
-                    <input
-                      name="password"
-                      value={credentials.password}
-                      onChange={(e) => handleChange(e)}
-                      placeholder="Enter PIN"
-                      type="text"
-                      className="rounded w-full h-full"
-                    />
-                  </div> */}
+                  <div className="w-full h-auto flex justify-between mb-1">
+                    <label className="text-[0.9em] font-bold text-slate-600">PIN</label>
+                    <button className="text-[0.9em] font-bold text-slate-400 w-auto" onClick={() => setPinIsHidden(!pinIsHidden)}>{pinIsHidden ? 'Show PIN' : 'Hide PIN'}</button>
+                  </div>
 
                   <OTPInput 
                     value={otp}
-                    onChange={(value) => setOTP(value)}
+                    onChange={handleChangePin}
                     numInputs={4}
-                    inputType="number"
+                    inputType= {pinIsHidden ? 'password' : 'number'}
                     containerStyle={{
                       display: 'flex',
                       width: '100%',

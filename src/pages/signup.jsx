@@ -19,7 +19,22 @@ export default function Signup({ f7router }) {
   const [communities, setCommunities] = useState([]);
   const [pin, setPin] = useState('');
   const [confirmPin, setConfirmPin] = useState('');
+  const [pinIsHidden, setPinIsHidden] = useState(true);
+  const [confirmPinIsHidden, setConfirmPinIsHidden] = useState(true);
   
+
+  const handleChangePin = (value) => {
+    if(!isNaN(Number(value))){
+      setPin(value);
+    }
+  }
+
+  const handleChangeConfirmPin = (value) => {
+    if(!isNaN(Number(value))){
+      setConfirmPin(value);
+    }
+  }
+
   const initialState = {
     fullname: '',
     mobile:'',
@@ -106,12 +121,13 @@ export default function Signup({ f7router }) {
       const finalData = {
         fullname: `${firstName} ${lastName}`,
         mobile,
-        pin,
-        confirmPin,
+        password: pin,
+        confirmpassword: confirmPin,
         deviceId:'',
         community,
         pin:true,
       };
+      
       console.log('sign in finalData', finalData);
       
       setIsLoading(true);
@@ -155,15 +171,16 @@ export default function Signup({ f7router }) {
                 </div>
                 
               <div className="w-full">
-                  <label className="text-[0.9em] font-bold text-slate-600 mb-1">Pin (4 digit pin)</label>
-                  {/* <div className="rounded w-full h-[2.5em] bg-white relative ps-2 pe-[50px] border border-slate-200">
-                    <input value={userData.password} onChange={handleChange} name="password" placeholder="Enter PIN" type="number" max={4} className="rounded w-full h-full" />
-                  </div> */}
+                  <div className="w-full h-auto flex justify-between mb-1">
+                    <label className="text-[0.9em] font-bold text-slate-600">PIN</label>
+                    <button className="text-[0.9em] font-bold text-slate-400 w-auto" onClick={() => setPinIsHidden(!pinIsHidden)}>{pinIsHidden ? 'Show PIN' : 'Hide PIN'}</button>
+                  </div>
+                  
                   <OTPInput 
                     value={pin}
-                    onChange={(value) => setPin(value)}
+                    onChange={handleChangePin}
                     numInputs={4}
-                    inputType="number"
+                    inputType={pinIsHidden ? 'password' : 'number'}
                     containerStyle={{
                       display: 'flex',
                       width: '100%',
@@ -186,15 +203,16 @@ export default function Signup({ f7router }) {
                 </div>
 
                 <div className="w-full">
-                  <label className="text-[0.9em] font-bold text-slate-600 mb-1">Confirm Pin</label>
-                  {/* <div className="rounded w-full h-[2.5em] bg-white relative ps-2 pe-[50px] border border-slate-200">
-                    <input value={userData.confirmpassword} maxLength={4} onChange={handleChange} name="confirmpassword" placeholder="Enter PIN" type="number" className="rounded w-full h-full" />
-                  </div> */}
+                  <div className="w-full h-auto flex justify-between mb-1">
+                    <label className="text-[0.9em] font-bold text-slate-600">Confirm PIN</label>
+                    <button className="text-[0.9em] font-bold text-slate-400 w-auto" onClick={() => setConfirmPinIsHidden(!confirmPinIsHidden)}>{confirmPinIsHidden ? 'Show PIN' : 'Hide PIN'}</button>
+                  </div>
+                  
                   <OTPInput 
                     value={confirmPin}
-                    onChange={(value) => setConfirmPin(value)}
+                    onChange={handleChangeConfirmPin}
                     numInputs={4}
-                    inputType="number"
+                    inputType= {confirmPinIsHidden ? 'password' : 'number'}
                     containerStyle={{
                       display: 'flex',
                       width: '100%',

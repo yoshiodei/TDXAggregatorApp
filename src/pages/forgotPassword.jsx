@@ -17,6 +17,27 @@ export default function ForgotPassword({ f7router }) {
   const [confirmPin, setConfirmPin] = useState('');
   const [otp, setOTP] = useState('');
   const [isOTPSent, setIsOTPSent] = useState(false);
+  const [otpIsHidden, setOtpIsHidden] = useState(true);
+  const [pinIsHidden, setPinIsHidden] = useState(true);
+  const [confirmPinIsHidden, setConfirmPinIsHidden] = useState(true);
+
+  const handleChangeOTP = (value) => {
+    if(!isNaN(Number(value))){
+      setOTP(value);
+    }
+  }
+  
+  const handleChangePin = (value) => {
+    if(!isNaN(Number(value))){
+      setPin(value);
+    }
+  }
+
+  const handleChangeConfirmPin = (value) => {
+    if(!isNaN(Number(value))){
+      setConfirmPin(value);
+    }
+  }
 
   const handleVerifyOTP = async () => {
     if(!otp || !pin || !confirmPin){
@@ -47,7 +68,7 @@ export default function ForgotPassword({ f7router }) {
         );
         const resetPinStatus = response.data;
         if(!resetPinStatus.error){
-          
+          f7router.navigate('/login/');
           f7.toast.show({
             text: 'PIN reset successful',
             position: 'top',
@@ -125,13 +146,15 @@ export default function ForgotPassword({ f7router }) {
       );
       const resetStatus = response.data;
       if(!resetStatus.error){
-        console.log('reset data', resetStatus);
+        
         f7router.navigate('/login/');
+
         f7.toast.show({
-          text: 'PIN reset successful',
+          text: 'PIN reset successful!',
           position: 'top',
           closeTimeout: 2000,
-      });
+        });
+
       } else {
         console.log('reset data', resetStatus);
         f7.dialog.alert(resetStatus.message, '');
@@ -179,6 +202,12 @@ export default function ForgotPassword({ f7router }) {
     }
   }
 
+  const loadOTPVerification = async () => {
+    setIsLoading(true);
+    await handleVerifyOTP();
+    setIsLoading(false);
+  }
+
   return (
     <Page name="login">
       <div className="w-full flex flex-col min-h-screen">
@@ -199,15 +228,15 @@ export default function ForgotPassword({ f7router }) {
             {isOTPSent && (<div>
             <div className="flex flex-col items-center gap-3 mb-3 w-full">
                 <div className="w-full">
-                  <label className="text-[0.9em] font-bold text-slate-600 mb-1">Verify OTP</label>
-                  {/* <div className="rounded w-full h-[2.5em] bg-white relative px-2 border border-slate-200">
-                    <input onChange={handleOnchange} value={resetData.pin} name="pin" min={0} placeholder="Enter new PIN" type="number" className="rounded w-full h-full" />
-                  </div> */}
+                  <div className="w-full h-auto flex justify-between mb-1">
+                    <label className="text-[0.9em] font-bold text-slate-600">Verify OTP</label>
+                    <button className="text-[0.9em] font-bold text-slate-400 w-auto" onClick={() => setOtpIsHidden(!otpIsHidden)}>{otpIsHidden ? 'Show OTP' : 'Hide OTP'}</button>
+                  </div>
                   <OTPInput 
                     value={otp}
-                    onChange={(value) => setOTP(value)}
+                    onChange={handleChangeOTP}
                     numInputs={4}
-                    inputType="number"
+                    inputType={otpIsHidden ? 'password' : 'number'}
                     containerStyle={{
                       display: 'flex',
                       width: '100%',
@@ -231,15 +260,16 @@ export default function ForgotPassword({ f7router }) {
             </div>
             <div className="flex flex-col items-center gap-3 mb-3 w-full">
                 <div className="w-full">
-                  <label className="text-[0.9em] font-bold text-slate-600 mb-1">New PIN</label>
-                  {/* <div className="rounded w-full h-[2.5em] bg-white relative px-2 border border-slate-200">
-                    <input onChange={handleOnchange} value={resetData.pin} name="pin" min={0} placeholder="Enter new PIN" type="number" className="rounded w-full h-full" />
-                  </div> */}
+                  <div className="w-full h-auto flex justify-between mb-1">
+                    <label className="text-[0.9em] font-bold text-slate-600">new PIN</label>
+                    <button className="text-[0.9em] font-bold text-slate-400 w-auto" onClick={() => setPinIsHidden(!pinIsHidden)}>{pinIsHidden ? 'Show PIN' : 'Hide PIN'}</button>
+                  </div>
+                  
                   <OTPInput 
                     value={pin}
-                    onChange={(value) => setPin(value)}
+                    onChange={handleChangePin}
                     numInputs={4}
-                    inputType="number"
+                    inputType= {pinIsHidden ? 'password' : 'number'}
                     containerStyle={{
                       display: 'flex',
                       width: '100%',
@@ -263,15 +293,17 @@ export default function ForgotPassword({ f7router }) {
             </div>
             <div className="flex flex-col items-center gap-3 mb-3 w-full">
                 <div className="w-full">
-                  <label className="text-[0.9em] font-bold text-slate-600 mb-1">Confirm PIN</label>
-                  {/* <div className="rounded w-full h-[2.5em] bg-white relative px-2 border border-slate-200">
-                    <input onChange={handleOnchange} value={resetData.confirmPin} name="confirmPin" min={0} placeholder="Enter new PIN" type="number" className="rounded w-full h-full" />
-                  </div> */}
+                  {/* <label className="text-[0.9em] font-bold text-slate-600 mb-1">Confirm PIN</label> */}
+                  <div className="w-full h-auto flex justify-between mb-1">
+                    <label className="text-[0.9em] font-bold text-slate-600">Confirm PIN</label>
+                    <button className="text-[0.9em] font-bold text-slate-400 w-auto" onClick={() => setConfirmPinIsHidden(!confirmPinIsHidden)}>{confirmPinIsHidden ? 'Show PIN' : 'Hide PIN'}</button>
+                  </div>
+                  
                   <OTPInput 
                     value={confirmPin}
-                    onChange={(value) => setConfirmPin(value)}
+                    onChange={handleChangeConfirmPin}
                     numInputs={4}
-                    inputType="number"
+                    inputType= {confirmPinIsHidden ? 'password' : 'number'}
                     containerStyle={{
                       display: 'flex',
                       width: '100%',
@@ -299,7 +331,7 @@ export default function ForgotPassword({ f7router }) {
             isOTPSent &&
             (
               <div className="mt-2">
-                <button onClick={ handleVerifyOTP } className="flex justify-center items-center w-full h-[2.5em] rounded bg-primary">
+                <button onClick={ loadOTPVerification } className="flex justify-center items-center w-full h-[2.5em] rounded bg-primary">
                   <h6 className="text-base font-semibold text-white">{isLoading ? '...loading' : 'Reset PIN'}</h6>
                 </button>
                 <div className="flex justify-center mt-1">
