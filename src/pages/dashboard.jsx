@@ -97,7 +97,7 @@ const Dashboard = ({ f7router }) => {
               </div>  
               <div className="flex-1 flex items-center">
                 <div>
-                  <h6 className="text-[0.85em] font-semibold">Total cash transaction</h6>
+                  <h6 className="text-[0.85em] font-semibold">Total Cash Transaction</h6>
                   <h4 className="font-semibold">{formatPrice(userBalance.total_cost)}</h4>
                 </div>  
               </div>  
@@ -114,7 +114,7 @@ const Dashboard = ({ f7router }) => {
               </div>  
               <div className="flex-1 flex items-center">
                 <div>
-                  <h6 className="text-[0.85em] font-semibold">Remaining payments</h6>
+                  <h6 className="text-[0.85em] font-semibold">Aggregation Fee Balance</h6>
                   <h4 className="font-semibold">{formatPrice(userBalance.pending_balance)}</h4>
                 </div>  
               </div>  
@@ -131,7 +131,7 @@ const Dashboard = ({ f7router }) => {
               </div>  
               <div className="flex-1 flex items-center">
                 <div>
-                  <h6 className="text-[0.85em] font-semibold">Total quantities sold</h6>
+                  <h6 className="text-[0.85em] font-semibold">Total Quantity Sold</h6>
                   <h4 className="font-semibold">{userBalance.total_quantity}</h4>
                 </div>  
               </div>  
