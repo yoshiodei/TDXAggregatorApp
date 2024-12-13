@@ -347,7 +347,7 @@ useEffect(() => {
                  <p className="text-primary text-[0.9em]">
                    Last updated 
                    {' '}
-                   <ReactTimeAgo date={new Date(commodityRate[6]?.last_synced)} locale="en-US"/>
+                  {commodityRate[6]?.last_synced ? <ReactTimeAgo date={new Date(commodityRate[6]?.last_synced)} locale="en-US"/> : 'N/A'}
                  </p>
                </div>
                <div className='flex flex-col gap-y-1'>
