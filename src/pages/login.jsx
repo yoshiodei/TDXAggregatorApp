@@ -12,6 +12,7 @@ export default function Login({ f7router }) {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [credentials, setCredentials] = useState({ phone: '', password: '' });
   const [challenge, setChallenge] = useState('');
+  const [enableOfflineMode, setEnableOfflineMode] = useState(false);
   const [loading, setLoading] = useState(false);
   const [otp, setOTP] = useState('');
   const [pinIsHidden, setPinIsHidden] = useState(true);
@@ -62,6 +63,9 @@ export default function Login({ f7router }) {
         }
     } catch (error) {
       console.error('Error getting challenge', error);
+      if(error.code === 'ERR_NETWORK'){
+        setEnableOfflineMode(true);
+      }
       f7.dialog.alert('Error fetching user','');
     }
 };
@@ -77,7 +81,14 @@ const hashHMAC = (message, key) => {
   const saveToDevice = (dataObj) => {
      const existingUsers = JSON.parse(localStorage.getItem('users')) || [];
      const isDuplicate = existingUsers.some((user) => user.token === dataObj.token);
-     if (isDuplicate) { return; }
+     if (isDuplicate) {
+      let updatedExistingUsers = []; 
+      updatedExistingUsers = existingUsers.map((user) => (
+        (user.token !== dataObj.token) ? user : dataObj 
+      ));
+      localStorage.setItem('users', JSON.stringify(updatedExistingUsers));
+      return; 
+     }
      else {
        const updatedUsers = [...existingUsers, dataObj];
        localStorage.setItem('users', JSON.stringify(updatedUsers));
@@ -110,6 +121,8 @@ const hashHMAC = (message, key) => {
 
         try {
             const result = await axios.post(`https://torux.app/api/validate_response/${response}`,{});
+            // console.log('Check user data ==>', result);
+            
             if (!result.data.error) {
 
                 const updatedOfflineUserData = checkForOfflineUserData(result.data);
@@ -218,6 +231,14 @@ const hashHMAC = (message, key) => {
             <button onClick={handleSubmit} className="flex justify-center items-center w-full sm:h-[2.5em] h-[30px] rounded bg-primary">
               <h6 className="text-base font-semibold text-white">{loading ? '...loading' : 'Log In'}</h6>
             </button>
+            {enableOfflineMode && 
+              (<button
+                onClick={() => f7router.navigate('/offline-login/')} 
+                className="flex justify-center items-center w-full sm:h-[2.5em] h-[30px] rounded bg-slate-400 my-2"
+                >
+                <h6 className="text-base font-semibold text-white">Continue On Offline mode</h6>
+              </button>)
+            }
             <div className="flex justify-center mt-1">
               <div className="text-[0.95em]">  
                 <h6 className="w-auto font-semibold text-slate-500 sm:text-left text-center">Don't have an account yet? <button onClick={() => f7router.navigate('/signup/')}  className="w-auto text-primary font-semibold">Sign Up</button></h6>
