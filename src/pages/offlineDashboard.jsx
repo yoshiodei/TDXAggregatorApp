@@ -123,9 +123,9 @@ export default function OfflineDashboard({ f7router }) {
             <button onClick={() => f7router.navigate('/sell-to-tdx-offline/')} className="rounded bg-primary h-[30px] sm:h-[3.5em] flex justify-center items-center">
               <h6 className="text-white font-bold">Sell to TDX</h6>
             </button>
-            {(isOnline) && (<button onClick={() => f7router.navigate('/login/')} className="rounded bg-white border-2 border-primary h-[30px] sm:h-[3.5em] flex justify-center items-center">
+            <button onClick={() => f7router.navigate('/login/')} className="rounded bg-white border-2 border-primary h-[30px] sm:h-[3.5em] flex justify-center items-center">
               <h6 className="font-bold text-primary">Switch to online mode</h6>
-            </button>)}
+            </button>
           </div>
 
         </div>

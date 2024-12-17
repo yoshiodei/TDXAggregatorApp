@@ -38,6 +38,7 @@ const HomePage = ({ f7router }) => {
 
      {(isOnline === true) && (<button
        onClick={() => f7router.navigate('/login/')}
+      //  onClick={() => f7router.navigate('/test/')}
        className="w-full h-[30px] sm:h-11 sm:p-[5px] p-[2px] rounded bg-primary-light text-font-light flex justify-between items-center px-5"
      >
        <h6 className="text-base font-bold">Get Started</h6>
