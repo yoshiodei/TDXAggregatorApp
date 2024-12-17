@@ -26,11 +26,16 @@ import OfflineSellToTDX from '../pages/offlineSellToTDX.jsx';
 import OfflineSaleComplete from '../pages/offlineSaleComplete.jsx';
 import PendingTransactions from '../pages/pendingTransactions.jsx';
 import CompleteTransaction from '../pages/completeTransaction.jsx';
+import TestPage from '../pages/test.jsx';
 
 var routes = [
   {
     path: '/',
     component: HomePage,
+  },
+  {
+    path: '/test/',
+    component: TestPage,
   },
   {
     path: '/sync-data/',
