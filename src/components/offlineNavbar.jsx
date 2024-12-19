@@ -13,7 +13,6 @@ import { ImSwitch } from 'react-icons/im';
 import { ImUser } from 'react-icons/im';
 import { AiFillDashboard } from "react-icons/ai";
 import FooterImg from '../assets/cultivating.png';
-import { AiOutlineFileDone } from "react-icons/ai";
 import {
     Page,
     Popup,
@@ -28,36 +27,36 @@ import {
 import store from '../js/store';
   
 
-export default function Navbar({f7router, goBack, title, menu}) {
-  const [popupOpened, setPopupOpened] = useState(false);
+export default function OfflineNavbar({ f7router, goBack, title, menu }) {
+    const [popupOpened, setPopupOpened] = useState(false);
   
-  const navigate = (path) => {
-    f7router.navigate(path);
-    setPopupOpened(false);
-  }
-
-  const handleLogout = () => {
-    store.dispatch('resetState');
-    setPopupOpened(false);
-    f7router.navigate('/');
-  };
-
-  const showLogoutDialog = () => {
-    f7.dialog.confirm(
-      'Are you sure you want to log out?',
-      'Confirm Logout',
-      () => {
-        handleLogout();
-      },
-      () => {
-        f7.toast.show({
-          text: 'Logout canceled',
-          position: 'top',
-          closeTimeout: 2000,
-        });
-      }
-    );
-  };
+    const navigate = (path) => {
+      f7router.navigate(path);
+      setPopupOpened(false);
+    }
+  
+    const handleLogout = () => {
+      store.dispatch('resetState');
+      setPopupOpened(false);
+      f7router.navigate('/');
+    };
+  
+    const showLogoutDialog = () => {
+      f7.dialog.confirm(
+        'Are you sure you want to log out?',
+        'Confirm Logout',
+        () => {
+          handleLogout();
+        },
+        () => {
+          f7.toast.show({
+            text: 'Logout canceled',
+            position: 'top',
+            closeTimeout: 2000,
+          });
+        }
+      );
+    };
 
   return (
     <>
@@ -97,19 +96,19 @@ export default function Navbar({f7router, goBack, title, menu}) {
                   <h6 className="font-semibold text-white text-[1.25em]">Close</h6>
                   <IoClose className="text-white text-[1.8em] font-bold" />
                 </button>
-                <button
+                {/* <button
                   onClick={() => navigate('/aggregator-profile/')}
                   className="flex w-auto h-[1.7em] items-center gap-x-1 px-[10px] py-[5px] rounded-full bg-green-600 text-white"
                 >
                   <GrUserSettings className="text-[0.85em]" />
                   <div className="w-[1px] h-full bg-white" />
                   <h6 className="text-[0.85em] font-semibold">Profile</h6>
-                </button>
+                </button> */}
               </div>
 
               <div>
                 <button
-                  onClick={() => navigate('/dashboard/')}
+                  onClick={() => navigate('/offline-dashboard/')}
                   className="flex justify-between items-center h-[38px] sm:h-[65px]"
                 >
                   <div className="flex items-center h-full text-white">
@@ -118,9 +117,11 @@ export default function Navbar({f7router, goBack, title, menu}) {
                   </div>
                   <FaChevronRight className="sm:text-[1.4em] text-[1em] text-white" />
                 </button>
+
                 <div className="h-[1px] w-full bg-green-200" />
+
                 <button
-                  onClick={() => navigate('/sell-to-tdx/')} 
+                  onClick={() => navigate('/sell-to-tdx-offline/')} 
                   className="flex justify-between items-center h-[38px] sm:h-[65px]"
                 >
                   <div className="flex items-center h-full text-white">
@@ -129,20 +130,11 @@ export default function Navbar({f7router, goBack, title, menu}) {
                   </div>
                   <FaChevronRight className="sm:text-[1.4em] text-[1em] text-white" />
                 </button>
+
                 <div className="h-[1px] w-full bg-green-200" />
+
                 <button
-                  onClick={() => navigate('/submitted-transactions/')}  
-                  className="flex justify-between items-center h-[38px] sm:h-[65px]"
-                >
-                  <div className="flex items-center h-full text-white">
-                    <AiOutlineFileDone className="text-[1.2em] sm:text-[1.8em] sm:me-8 me-4 text-primary-light" />
-                    <h4 className="font-semibold sm:text-[1.4em] text-[1em]">Submitted Transactions</h4>
-                  </div>
-                  <FaChevronRight className="sm:text-[1.4em] text-[1em] text-white" />
-                </button>
-                <div className="h-[1px] w-full bg-green-200" />
-                <button
-                  onClick={() => navigate('/pending-transactions/')}  
+                  onClick={() => navigate('/offline-pending-transactions/')}  
                   className="flex justify-between items-center h-[38px] sm:h-[65px]"
                 >
                   <div className="flex items-center h-full text-white">
@@ -151,47 +143,13 @@ export default function Navbar({f7router, goBack, title, menu}) {
                   </div>
                   <FaChevronRight className="sm:text-[1.4em] text-[1em] text-white" />
                 </button>
-                {/* <div className="h-[1px] w-full bg-green-200" /> */}
-                {/* <button className="flex justify-between items-center h-[38px] sm:h-[65px]">
-                  <div className="flex items-center h-full text-white">
-                    <IoStatsChart className="text-[1.2em] sm:text-[1.8em] sm:me-8 me-4 text-primary-light" />
-                    <h4 className="font-semibold sm:text-[1.4em] text-[1em]">My aggregates</h4>
-                  </div>
-                  <FaChevronRight className="sm:text-[1.4em] text-[1em] text-white" />
-                </button>
-                <div className="h-[1px] w-full bg-green-200" /> */}
-                {/* <button 
-                  onClick={() => navigate('/farmers/')} 
-                  className="flex justify-between items-center h-[38px] sm:h-[65px]"
-                >
-                  <div className="flex items-center h-full text-white">
-                    <ImUser className="text-[1.2em] sm:text-[1.8em] sm:me-8 me-4 text-primary-light" />
-                    <h4 className="font-semibold sm:text-[1.4em] text-[1em]">Farmers</h4>
-                  </div>
-                  <FaChevronRight className="sm:text-[1.4em] text-[1em] text-white" />
-                </button>
-                <div className="h-[1px] w-full bg-green-200" /> */}
-                {/* <button className="flex justify-between items-center h-[38px] sm:h-[65px]">
-                  <div className="flex items-center h-full text-white">
-                    <IoPricetagsOutline className="text-[1.2em] sm:text-[1.8em] sm:me-8 me-4 text-primary-light" />
-                    <h4 className="font-semibold sm:text-[1.4em] text-[1em]">Community prices</h4>
-                  </div>
-                  <FaChevronRight className="sm:text-[1.4em] text-[1em] text-white" />
-                </button>
-                <div className="h-[1px] w-full bg-green-200" /> */}
-                {/* <button className="flex justify-between items-center h-[38px] sm:h-[65px]">
-                  <div className="flex items-center h-full text-white">
-                    <IoIosSettings className="text-[1.2em] sm:text-[1.8em] sm:me-8 me-4 text-primary-light" />
-                    <h4 className="font-semibold sm:text-[1.4em] text-[1em]">Settings</h4>
-                  </div>
-                  <FaChevronRight className="sm:text-[1.4em] text-[1em] text-white" />
-                </button> */}
+
               </div>
 
               <div className="mt-10">
-                <button onClick={showLogoutDialog} className=" w-auto sm:h-[35px] h-[25px] flex text-white gap-x-2 items-center bg-green-600 rounded-full px-4">
+                <button onClick={() => navigate('/login/')} className=" w-auto sm:h-[35px] h-[25px] flex text-white gap-x-2 items-center bg-green-600 rounded-full px-4">
                   <ImSwitch className="text-[0.95em] sm:text-[1.2em]" />    
-                  <h6 className="font-semibold">Logout</h6>
+                  <h6 className="font-semibold">Switch to Online Mode</h6>
                 </button>
               </div>
 
@@ -207,6 +165,5 @@ export default function Navbar({f7router, goBack, title, menu}) {
         </Page>
       </Popup>
       </>
-
   )
 }

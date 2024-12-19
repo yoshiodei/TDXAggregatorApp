@@ -1,6 +1,6 @@
 import React from 'react'
 import { FaHeart } from "react-icons/fa";
-import Navbar from '../components/navbar';
+import OfflineNavbar from '../components/offlineNavbar';
 import { Page } from 'framework7-react';
 
 export default function OfflineSaleComplete({ f7router }) {
@@ -8,7 +8,7 @@ export default function OfflineSaleComplete({ f7router }) {
     <Page name="home">
       <div className="relative w-full flex flex-col justify-between h-screen overflow-hidden">
 
-        <Navbar  title="Sale Complete" f7router={f7router}/>
+        <OfflineNavbar  title="Sale Complete" f7router={f7router}/>
 
         <div className="flex-1 w-full p-5 flex flex-col justify-center items-center bg-background-primary">
           <div className="flex flex-col gap-y-2 justify-center items-center">

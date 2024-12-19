@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Navbar from '../components/navbar'
+import OfflineNavbar from '../components/offlineNavbar'
 import { f7, Page } from 'framework7-react'
 import { IoIosArrowDown } from "react-icons/io";
 import { MdCloudOff } from 'react-icons/md'
@@ -100,7 +100,7 @@ export default function OfflineSellToTDX({ f7router }) {
           <MdCloudOff  />
           <p className=" text-semibold">You are offline</p>
         </div>
-        <Navbar  title="Sell to TDX" goBack={true} f7router={f7router} />
+        <OfflineNavbar  title="Sell to TDX" goBack={true} f7router={f7router} />
         <div className="flex-1 w-full sm:p-5 p-3 flex flex-col justify-between gap-y-5 bg-background-primary">
           <div>
             <div className="sm:mb-3 mb-2">

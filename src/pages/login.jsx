@@ -3,10 +3,10 @@ import React, { useState } from 'react'
 import Navbar from '../components/navbar'
 import OTPInput from 'react-otp-input'
 import { FaEye } from 'react-icons/fa'
-import { FaEyeSlash } from "react-icons/fa";
-import CryptoJS, { crypto } from 'crypto-js';
-import axios from 'axios';
-import store from '../js/store';
+import { FaEyeSlash } from "react-icons/fa"
+import CryptoJS, { crypto } from 'crypto-js'
+import axios from 'axios'
+import store from '../js/store'
 
 export default function Login({ f7router }) {
   const [passwordVisible, setPasswordVisible] = useState(false);

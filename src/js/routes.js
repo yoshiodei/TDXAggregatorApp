@@ -26,17 +26,19 @@ import OfflineSellToTDX from '../pages/offlineSellToTDX.jsx';
 import OfflineSaleComplete from '../pages/offlineSaleComplete.jsx';
 import PendingTransactions from '../pages/pendingTransactions.jsx';
 import CompleteTransaction from '../pages/completeTransaction.jsx';
-import TestPage from '../pages/test.jsx';
+import offlinePendingTransactions from '../pages/offlinePendingTransactions.jsx';
+import SubmittedTransactions from '../pages/submittedTransactions.jsx';
+// import TestPage from '../pages/test.jsx';
 
 var routes = [
   {
     path: '/',
     component: HomePage,
   },
-  {
-    path: '/test/',
-    component: TestPage,
-  },
+  // {
+  //   path: '/test/',
+  //   component: TestPage,
+  // },
   {
     path: '/sync-data/',
     component: SyncData,
@@ -90,6 +92,10 @@ var routes = [
     component: OrderStatus,
   },
   {
+    path: '/submitted-transactions/',
+    component: SubmittedTransactions,
+  },
+  {
     path: '/pending-transactions/',
     component: PendingTransactions,
   },
@@ -108,6 +114,11 @@ var routes = [
   {
     path: '/offline-dashboard/',
     component: OfflineDashboard,
+  },
+  {
+    path: '/offline-pending-transactions/',
+    // component: OfflinePendingTransaction,
+    component: offlinePendingTransactions
   },
   {
     path: '/sell-to-tdx-offline/',
