@@ -19,3 +19,26 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+
+
+
+
+# Keep Capacitor classes
+-keep class com.getcapacitor.** { *; }
+
+# Keep plugin classes
+-keep class com.getcapacitor.plugin.** { *; }
+
+# Avoid obfuscation of Kotlin data classes
+-keepclassmembers class * {
+    public <init>(...);
+}
+
+# Keep all methods annotated with @JavascriptInterface
+-keepclassmembers class * {
+    @android.webkit.JavascriptInterface <methods>;
+}
+
+# Prevent obfuscation of your main application class
+-keep class com.tdxapps.aggregator.MainActivity { *; }

@@ -1,8 +1,10 @@
 apply plugin: 'com.android.application'
+// apply plugin: 'com.android.library'
 
 android {
     namespace "com.tdxapps.aggregator"
     compileSdk rootProject.ext.compileSdkVersion
+
     defaultConfig {
         applicationId "com.tdxapps.aggregator"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -16,10 +18,20 @@ android {
             ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    signingConfigs {
+        release {
+            keyAlias 'tdx-app-releasekey'           // Replace with your key alias
+            keyPassword 'tdxAggregatorApp'     // Replace with your key password
+            storeFile file('app/tdxrelease-key.jks')  // Path to your keystore file
+            storePassword 'tdxAggregatorApp' // Replace with your keystore password
+        }
+    }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            // proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 }
