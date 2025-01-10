@@ -21,18 +21,18 @@ android {
     signingConfigs {
         release {
             keyAlias 'tdx-app-releasekey'           // Replace with your key alias
-            keyPassword 'tdxAggregatorApp'     // Replace with your key password
-            storeFile file('app/tdxrelease-key.jks')  // Path to your keystore file
-            storePassword 'tdxAggregatorApp' // Replace with your keystore password
+            keyPassword 'TDXRELEASEKEY'     // Replace with your key password
+            storeFile file('app/tdx-release-key.jks')  // Path to your keystore file
+            storePassword 'TDXRELEASEKEY' // Replace with your keystore password
         }
     }
     buildTypes {
-        release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            // proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
-        }
+      release {
+        minifyEnabled true // Optional: Enable ProGuard (use false if you're not optimizing)
+        // proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        signingConfig signingConfigs.release
+      }
     }
 }
 
