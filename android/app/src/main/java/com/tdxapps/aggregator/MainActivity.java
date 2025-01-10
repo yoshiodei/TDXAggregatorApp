@@ -1,4 +1,4 @@
-package com.example.app;
+package com.tdxapps.aggregator;
 
 import com.getcapacitor.BridgeActivity;
 
