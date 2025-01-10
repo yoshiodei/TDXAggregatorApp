@@ -22,7 +22,7 @@ android {
         release {
             keyAlias 'tdx-app-releasekey'           // Replace with your key alias
             keyPassword 'TDXRELEASEKEY'     // Replace with your key password
-            storeFile file('app/tdx-release-key.jks')  // Path to your keystore file
+            storeFile file('tdx-release-key.jks')  // Path to your keystore file
             storePassword 'TDXRELEASEKEY' // Replace with your keystore password
         }
     }
