@@ -19,7 +19,6 @@ export default function FarmerDetails({ f7router }) {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingMomo, setIsLoadingMomo] = useState(false);
   const [commodityPrice, setCommodityPrice] = useState({});
-  const [errorMessage, setErrorMessage] = useState('');
   const [phone, setPhone] = useState('');
   const [momoNumber, setMomoNumber] = useState({ message: '', number: '' });
   const [farmer, setFarmer] = useState({});
@@ -67,12 +66,13 @@ export default function FarmerDetails({ f7router }) {
       );
       const priceData = response.data;
       console.log('price Data', priceData);
-      setErrorMessage('');
       setCommodityPrice(priceData);
     } catch (error) {
       console.error('Error fetching data:', error);
-      setErrorMessage(error.code);
-      f7.dialog.alert('Unable to fetch data','');
+      if(error.code === 'ERR_NETWORK'){
+        setEnableOfflineMode(true);
+      }
+      // f7.dialog.alert('Unable to fetch data','');
     }
 }
 
@@ -99,12 +99,13 @@ const verifyMomoNumber = async () => {
     else{
       setMomoNumber({ message:momoData.message, number:momoData.number });
     }
-    setErrorMessage('');
     // setCommodityPrice(priceData);
   } catch (error) {
     console.error('Error fetching data:', error);
-    setErrorMessage(error.code);
-    f7.dialog.alert('Unable to fetch data','');
+    if(error.code === 'ERR_NETWORK'){
+      setEnableOfflineMode(true);
+    }
+    f7.dialog.alert('Unable to fetch number','');
   }
 }
 
@@ -128,6 +129,9 @@ const fetchFarmer = async () => {
     setFarmer(farmerData);
   } catch (error) {
     console.error('Error fetching data:', error);
+    if(error.code === 'ERR_NETWORK'){
+      setEnableOfflineMode(true);
+    }
     f7.dialog.alert('Unable to fetch data','');
   }
 }
@@ -154,6 +158,9 @@ const completeOrder = async (farmerDataObj) => {
     }
   } catch (error) {
     console.error('Error fetching data:', error);
+    if(error.code === 'ERR_NETWORK'){
+      setEnableOfflineMode(true);
+    }
     f7.dialog.alert('Unable to submit order. Please try again.','');
   }
 }
@@ -217,11 +224,11 @@ const completeOrder = async (farmerDataObj) => {
           </div>  
           <div>
             <h6 className="font-bold text-white sm:text-base text-[0.9em]">{store.state.saleData.commodity.split(", ")[1]}</h6>  
-            <h6 className="text-primary font-semibold sm:text-base text-[0.9em]">{`${commodityPrice.bags} bags, ${store.state.saleData.quantity} KG`}</h6>  
+            <h6 className="text-primary font-semibold sm:text-base text-[0.9em]">{`${commodityPrice.bags} bags, ${store.state.saleData.quantity} KG`}</h6>
           </div>
         </div>
         <div>
-          <h6 className="font-bold text-white sm:text-base text-[0.9em]">{`₵ ${commodityPrice.totalcost}`}</h6>    
+          <h6 className="font-bold text-white sm:text-base text-[0.9em]">{`₵ ${commodityPrice.totalcost}`}</h6>  
         </div>
       </div>
 

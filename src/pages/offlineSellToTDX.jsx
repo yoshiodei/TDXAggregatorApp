@@ -68,6 +68,7 @@ export default function OfflineSellToTDX({ f7router }) {
         }
 
         localStorage.setItem('users', JSON.stringify(updatedUserList));
+        store.dispatch('setOfflineUser', newMatch);
         f7router.navigate('/offline-sale-complete/');
         return;
       }
@@ -87,6 +88,7 @@ export default function OfflineSellToTDX({ f7router }) {
         }
 
         localStorage.setItem('users', JSON.stringify(updatedUserList));
+        store.dispatch('setOfflineUser', updatedUser);
         f7router.navigate('/offline-sale-complete/');
         return;
       }

@@ -19,6 +19,7 @@ const Dashboard = ({ f7router }) => {
   TimeAgo.addLocale(en);
   const [userBalance, setUserBalance] = useState({});
   const [time, setTime] = useState('');
+  const [enableOfflineMode, setEnableOfflineMode] = useState(false);
 
   const fetchUserBalance = async () => {
     try {
@@ -40,7 +41,10 @@ const Dashboard = ({ f7router }) => {
       // setCommodityList(commodityData);
     } catch (error) {
       console.error('Error fetching data:', error);
-      // setErrorMessage(error.code);
+      
+      if(error.code === 'ERR_NETWORK'){
+        setEnableOfflineMode(true);
+      }
       f7.dialog.alert('Unable to fetch data','');
     }
  }
@@ -76,21 +80,6 @@ const Dashboard = ({ f7router }) => {
 
         <div className="flex flex-col justify-between flex-1 gap-y-14">
           <div className="flex flex-col gap-y-3">
-
-            {/* <div className="h-[60px] rounded bg-white p-[5px] flex justify-between gap-x-2">
-              <div className="w-[50px] h-[50px] p-[8px] rounded bg-slate-300 flex justify-center items-center">
-              <img src={totalPaymentIcon} alt='bag icon' className='w-full h-full' />
-              </div>  
-              <div className="flex-1 flex items-center">
-                <div>
-                  <h6 className="text-[0.85em] font-semibold">Total payments received</h6>
-                  <h4 className="font-semibold">{formatPrice(userBalance.total_cost)}</h4>
-                </div>  
-              </div>  
-              <div className="flex items-center">
-              </div>  
-            </div>   */}
-
             <div className="h-[60px] rounded bg-white p-[5px] flex justify-between gap-x-2">
               <div className="w-[50px] h-[50px] p-[12px] rounded bg-slate-300 flex justify-center items-center">
                 <img src={bagIcon} alt='bag icon' className='w-full h-full' />
@@ -148,9 +137,14 @@ const Dashboard = ({ f7router }) => {
             <button onClick={() => f7router.navigate('/sell-to-tdx/')} className="rounded bg-primary h-[30px] sm:h-[3.5em] flex justify-center items-center">
               <h6 className="text-white font-bold">Sell to TDX</h6>
             </button>
-            {/* <button className="rounded border-2 border-primary h-[3.5em] flex justify-center items-center">
-              <h6 className="font-bold">Place Order</h6>
-            </button> */}
+            {enableOfflineMode && 
+              (<button
+                onClick={() => f7router.navigate('/offline-login/')} 
+                className="flex justify-center items-center w-full sm:h-[2.5em] h-[30px] rounded bg-slate-400 my-2"
+                >
+                <h6 className="text-base font-semibold text-white">Continue On Offline mode</h6>
+              </button>)
+            }
           </div>
 
         </div>

@@ -16,6 +16,7 @@ import en from 'javascript-time-ago/locale/en'
 export default function SellToTDX({ f7router }) {
   TimeAgo.addLocale(en);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [enableOfflineMode, setEnableOfflineMode] = useState(false);
 
   const [commodityValue, setCommodityValue] = useState('');
   const [siloValue, setSiloValue] = useState('');
@@ -23,7 +24,6 @@ export default function SellToTDX({ f7router }) {
 
   const [commodityList, setCommodityList] = useState([]);
   const [siloList, setSiloList] = useState([]);
-  const [errorMessage, setErrorMessage] = useState('');
   const [time, setTime] = useState('');
 
   const [commodityPrice ,setCommodityPrice] = useState({});
@@ -44,12 +44,13 @@ export default function SellToTDX({ f7router }) {
       );
       const commodityData = response.data;
       console.log('commodity Data', commodityData);
-      setErrorMessage('');
       setCommodityList(commodityData);
     } catch (error) {
       console.error('Error fetching data:', error);
-      setErrorMessage(error.code);
-      f7.dialog.alert('Unable to fetch data','');
+      if(error.code === 'ERR_NETWORK'){
+        setEnableOfflineMode(true);
+      }
+      // f7.dialog.alert('Unable to fetch data','');
     }
 }
 
@@ -67,11 +68,9 @@ export default function SellToTDX({ f7router }) {
       );
       const siloData = response.data;
       console.log('silo Data', siloData);
-      setErrorMessage('');
       setSiloList(siloData);
     } catch (error) {
       console.error('Error fetching data:', error);
-      setErrorMessage(error.code);
       f7.dialog.alert('Unable to fetch data','');
     }
 }
@@ -95,7 +94,7 @@ export default function SellToTDX({ f7router }) {
     } catch (error) {
       console.error('Error fetching data:', error);
       // setErrorMessage(error.code);
-      f7.dialog.alert('Unable to fetch data','');
+      // f7.dialog.alert('Unable to fetch data','');
     }
 }
 
@@ -118,7 +117,7 @@ export default function SellToTDX({ f7router }) {
     } catch (error) {
       console.error('Error fetching data:', error);
       // setErrorMessage(error.code);
-      f7.dialog.alert('Unable to fetch data','');
+      // f7.dialog.alert('Unable to fetch data','');
     }
 }
 
@@ -138,7 +137,7 @@ export default function SellToTDX({ f7router }) {
       f7.dialog.alert('Please select a silo');
       return null;
     }
-    if(!weight){
+    if(!weight || weight < 1){
       f7.dialog.alert('Weight field cannot be empty','');
       return null;
     }
@@ -167,12 +166,10 @@ export default function SellToTDX({ f7router }) {
       );
       const priceData = response.data;
       console.log('price Data', priceData);
-      setErrorMessage('');
       setCommodityPrice(priceData);
     } catch (error) {
       console.error('Error fetching data:', error);
-      setErrorMessage(error.code);
-      f7.dialog.alert('Unable to fetch data','');
+      // f7.dialog.alert('Unable to fetch data','');
     }
 }
 
@@ -190,12 +187,10 @@ const fetchCommodityRate = async () => {
     );
     const rateData = response.data;
     console.log('rate Data', rateData);
-    setErrorMessage('');
     setCommodityRate(rateData);
   } catch (error) {
     console.error('Error fetching data:', error);
-    setErrorMessage(error.code);
-    f7.dialog.alert('Unable to fetch data','');
+    // f7.dialog.alert('Unable to fetch data','');
   }
 }
 
@@ -280,13 +275,13 @@ useEffect(() => {
           </div>)}
 
           <div className="mt-5">
-            {(errorMessage === '') && (<button
+            <button
               onClick={handleSubmit}
               className="flex justify-center items-center w-full h-[35px] sm:h-[3em] rounded bg-primary mb-2">
               <h6 className="text-lg font-semibold text-white">Continue</h6>
-            </button>)}
+            </button>
 
-            {(errorMessage === 'ERR_NETWORK') && (<div className="rounded border border-slate-300 bg-slate-200 p-2">
+            {/* {(errorMessage === 'ERR_NETWORK') && (<div className="rounded border border-slate-300 bg-slate-200 p-2">
               <div className="flex flex-col items-center justify-center text-slate-400 mb-2">
                 <MdCloudOff className="text-[3.5em]" />
                 <h6 className="text-lg font-semibold text-center">You are offline</h6>
@@ -301,7 +296,18 @@ useEffect(() => {
                 className="flex justify-center items-center w-full h-[2.5em] rounded border-2 border-slate-300">
                 <h6 className="text-base font-semibold text-slate-500">Reload</h6>
               </button>
-            </div>)}
+            </div>)} */}
+
+            { enableOfflineMode && 
+              (
+                <button
+                  onClick={() => f7router.navigate('/offline-login/')} 
+                  className="flex justify-center items-center w-full sm:h-[2.5em] h-[30px] rounded bg-slate-400 my-2"
+                >
+                  <h6 className="text-base font-semibold text-white">Continue On Offline mode</h6>
+                </button>
+              )
+            }
 
           </div>
         </div>

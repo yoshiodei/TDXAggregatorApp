@@ -149,6 +149,9 @@ const hashHMAC = (message, key) => {
             }
         } catch (error) {
             console.error('Error validating response', error);
+            if(error.code === 'ERR_NETWORK'){
+              setEnableOfflineMode(true);
+            }
             f7.dialog.alert('Something went wrong. Try again later','');
         }
   }

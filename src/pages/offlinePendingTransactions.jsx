@@ -8,7 +8,7 @@ export default function offlinePendingTransactions({ f7router }) {
     const [pendingTransactionsList, setPendingTransactionsList] = useState([]);  
   
     useEffect(() => {
-      setPendingTransactionsList(store.state?.user?.pendingTransactions || []);
+      setPendingTransactionsList(store.state?.offlineUser?.pendingTransactions || []);
     }, []);  
   
     if(pendingTransactionsList?.length === 0){
@@ -29,7 +29,7 @@ export default function offlinePendingTransactions({ f7router }) {
             <div className="flex flex-col gap-y-3 items-center p-2 sm:p-5">  
               {
                   pendingTransactionsList.map((transaction) => (
-                  <button onClick={() => f7router.navigate(`/pending-transaction/${transaction?.id}`) } key={transaction.id} className="flex flex-col rounded bg-white sm:p-3 p-2 h-auto border border-slate-200">
+                  <button key={transaction.id} className="flex flex-col rounded bg-white sm:p-3 p-2 h-auto border border-slate-200">
                     <div className="flex gap-x-2 items-center">
                       <div className="rounded h-[1.8em] w-[1.8em] bg-slate-400 flex justify-center items-center">
                         <img src={commodityImage} alt="commodity" className="h-[1.5em]"  />

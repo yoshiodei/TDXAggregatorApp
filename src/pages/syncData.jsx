@@ -40,7 +40,7 @@ export default function SyncData({ f7router }) {
     } catch (error) {
       console.error('Error fetching data:', error);
       setErrorMessage(error.code);
-      f7.dialog.alert('Unable to fetch data','');
+      // f7.dialog.alert('Unable to fetch data','');
     }
   }
 
@@ -66,7 +66,7 @@ export default function SyncData({ f7router }) {
     } catch (error) {
       console.error('Error fetching data:', error);
       setErrorMessage(error.code);
-      f7.dialog.alert('Unable to fetch data','');
+      // f7.dialog.alert('Unable to fetch data','');
     }
 }
 
@@ -92,7 +92,7 @@ export default function SyncData({ f7router }) {
     } catch (error) {
       console.error('Error fetching data:', error);
       setErrorMessage(error.code);
-      f7.dialog.alert('Unable to fetch data','');
+      // f7.dialog.alert('Unable to fetch data','');
     }
 }
 
