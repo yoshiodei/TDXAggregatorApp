@@ -19,6 +19,7 @@
   "dependencies": {
     "@capacitor/android": "^6.1.2",
     "@capacitor/cli": "^6.1.2",
+    "@capacitor/network": "^6.0.3",
     "axios": "^1.7.7",
     "crypto-js": "^4.2.0",
     "dexie": "^4.0.10",
