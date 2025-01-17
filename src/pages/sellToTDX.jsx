@@ -11,6 +11,8 @@ import store from '../js/store';
 import TimeAgo from 'javascript-time-ago';
 import ReactTimeAgo from 'react-time-ago'; 
 import en from 'javascript-time-ago/locale/en'
+import useConnection from '../hooks/useConnection';
+import OfflinePanel from '../components/offlinePanel';
 
 
 export default function SellToTDX({ f7router }) {
@@ -29,6 +31,8 @@ export default function SellToTDX({ f7router }) {
   const [commodityPrice ,setCommodityPrice] = useState({});
   const [priceLoading ,setPriceLoading] = useState(false);
   const [commodityRate, setCommodityRate] = useState([]);
+
+  const {connectionStatus} = useConnection();
   
   const fetchCommodity = async () => {
     try {
@@ -275,40 +279,20 @@ useEffect(() => {
           </div>)}
 
           <div className="mt-5">
-            <button
-              onClick={handleSubmit}
-              className="flex justify-center items-center w-full h-[35px] sm:h-[3em] rounded bg-primary mb-2">
-              <h6 className="text-lg font-semibold text-white">Continue</h6>
-            </button>
-
-            {/* {(errorMessage === 'ERR_NETWORK') && (<div className="rounded border border-slate-300 bg-slate-200 p-2">
-              <div className="flex flex-col items-center justify-center text-slate-400 mb-2">
-                <MdCloudOff className="text-[3.5em]" />
-                <h6 className="text-lg font-semibold text-center">You are offline</h6>
-              </div>
+            {
+              connectionStatus && (
               <button
-                onClick={() => f7router.navigate('/')}
-                className="flex justify-center items-center w-full h-[2.5em] rounded bg-slate-300 mb-2">
-                <h6 className="text-base font-semibold text-slate-500">Continue Offline</h6>
-              </button>
-              <button
-                onClick={() => setTime(new Date().getMilliseconds().toString())}
-                className="flex justify-center items-center w-full h-[2.5em] rounded border-2 border-slate-300">
-                <h6 className="text-base font-semibold text-slate-500">Reload</h6>
-              </button>
-            </div>)} */}
-
-            { enableOfflineMode && 
-              (
-                <button
-                  onClick={() => f7router.navigate('/offline-login/')} 
-                  className="flex justify-center items-center w-full sm:h-[2.5em] h-[30px] rounded bg-slate-400 my-2"
-                >
-                  <h6 className="text-base font-semibold text-white">Continue On Offline mode</h6>
-                </button>
+                onClick={handleSubmit}
+                className="flex justify-center items-center w-full h-[35px] sm:h-[3em] rounded bg-primary mb-2"
+              >
+                <h6 className="text-lg font-semibold text-white">Continue</h6>
+              </button>)
+            }
+            {
+              !connectionStatus && (
+                <OfflinePanel f7router={f7router} />
               )
             }
-
           </div>
         </div>
 

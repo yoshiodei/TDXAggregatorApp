@@ -14,12 +14,16 @@ import scaleIcon from '../assets/scale-icon.png'
 import totalPaymentIcon from '../assets/received_amount.png'
 import pendingIcon from '../assets/pending_amount_icon.png'
 import { formatPrice } from '../config/util';
+import OfflinePanel from '../components/offlinePanel';
+import useConnection from '../hooks/useConnection';
 
 const Dashboard = ({ f7router }) => {
   TimeAgo.addLocale(en);
   const [userBalance, setUserBalance] = useState({});
   const [time, setTime] = useState('');
   const [enableOfflineMode, setEnableOfflineMode] = useState(false);
+
+  const {connectionStatus} = useConnection();
 
   const fetchUserBalance = async () => {
     try {
@@ -52,6 +56,16 @@ const Dashboard = ({ f7router }) => {
  useEffect(() => {
    fetchUserBalance();
  }, [time]);
+
+ const handleSubmit = async() => {
+   await setTime('1');
+   if(enableOfflineMode){
+     return;
+   } else {
+     f7router.navigate('/sell-to-tdx/');
+     return;
+   }
+ }
 
   return (
   <Page name="home">
@@ -134,16 +148,11 @@ const Dashboard = ({ f7router }) => {
           </div>
 
           <div className="flex flex-col gap-y-2 mb-3">
-            <button onClick={() => f7router.navigate('/sell-to-tdx/')} className="rounded bg-primary h-[30px] sm:h-[3.5em] flex justify-center items-center">
+            {connectionStatus && (<button onClick={handleSubmit} className="rounded bg-primary h-[30px] sm:h-[3.5em] flex justify-center items-center">
               <h6 className="text-white font-bold">Sell to TDX</h6>
-            </button>
-            {enableOfflineMode && 
-              (<button
-                onClick={() => f7router.navigate('/offline-login/')} 
-                className="flex justify-center items-center w-full sm:h-[2.5em] h-[30px] rounded bg-slate-400 my-2"
-                >
-                <h6 className="text-base font-semibold text-white">Continue On Offline mode</h6>
-              </button>)
+            </button>)}
+            {!connectionStatus && 
+              (<OfflinePanel f7router={f7router} />)
             }
           </div>
 

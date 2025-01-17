@@ -26,10 +26,14 @@ import {
     f7,
   } from 'framework7-react';
 import store from '../js/store';
+import useConnection from '../hooks/useConnection';
+import OfflinePanel from './offlinePanel';
   
 
 export default function Navbar({f7router, goBack, title, menu}) {
   const [popupOpened, setPopupOpened] = useState(false);
+
+  const {connectionStatus} = useConnection();
   
   const navigate = (path) => {
     f7router.navigate(path);
@@ -107,7 +111,7 @@ export default function Navbar({f7router, goBack, title, menu}) {
                 </button>
               </div>
 
-              <div>
+              {connectionStatus && (<div>
                 <button
                   onClick={() => navigate('/dashboard/')}
                   className="flex justify-between items-center h-[38px] sm:h-[65px]"
@@ -151,42 +155,13 @@ export default function Navbar({f7router, goBack, title, menu}) {
                   </div>
                   <FaChevronRight className="sm:text-[1.4em] text-[1em] text-white" />
                 </button>
-                {/* <div className="h-[1px] w-full bg-green-200" /> */}
-                {/* <button className="flex justify-between items-center h-[38px] sm:h-[65px]">
-                  <div className="flex items-center h-full text-white">
-                    <IoStatsChart className="text-[1.2em] sm:text-[1.8em] sm:me-8 me-4 text-primary-light" />
-                    <h4 className="font-semibold sm:text-[1.4em] text-[1em]">My aggregates</h4>
-                  </div>
-                  <FaChevronRight className="sm:text-[1.4em] text-[1em] text-white" />
-                </button>
-                <div className="h-[1px] w-full bg-green-200" /> */}
-                {/* <button 
-                  onClick={() => navigate('/farmers/')} 
-                  className="flex justify-between items-center h-[38px] sm:h-[65px]"
-                >
-                  <div className="flex items-center h-full text-white">
-                    <ImUser className="text-[1.2em] sm:text-[1.8em] sm:me-8 me-4 text-primary-light" />
-                    <h4 className="font-semibold sm:text-[1.4em] text-[1em]">Farmers</h4>
-                  </div>
-                  <FaChevronRight className="sm:text-[1.4em] text-[1em] text-white" />
-                </button>
-                <div className="h-[1px] w-full bg-green-200" /> */}
-                {/* <button className="flex justify-between items-center h-[38px] sm:h-[65px]">
-                  <div className="flex items-center h-full text-white">
-                    <IoPricetagsOutline className="text-[1.2em] sm:text-[1.8em] sm:me-8 me-4 text-primary-light" />
-                    <h4 className="font-semibold sm:text-[1.4em] text-[1em]">Community prices</h4>
-                  </div>
-                  <FaChevronRight className="sm:text-[1.4em] text-[1em] text-white" />
-                </button>
-                <div className="h-[1px] w-full bg-green-200" /> */}
-                {/* <button className="flex justify-between items-center h-[38px] sm:h-[65px]">
-                  <div className="flex items-center h-full text-white">
-                    <IoIosSettings className="text-[1.2em] sm:text-[1.8em] sm:me-8 me-4 text-primary-light" />
-                    <h4 className="font-semibold sm:text-[1.4em] text-[1em]">Settings</h4>
-                  </div>
-                  <FaChevronRight className="sm:text-[1.4em] text-[1em] text-white" />
-                </button> */}
-              </div>
+              </div>)}
+
+              {
+                !connectionStatus && (
+                  <OfflinePanel f7router={f7router} />
+                )
+              }
 
               <div className="mt-10">
                 <button onClick={showLogoutDialog} className=" w-auto sm:h-[35px] h-[25px] flex text-white gap-x-2 items-center bg-green-600 rounded-full px-4">

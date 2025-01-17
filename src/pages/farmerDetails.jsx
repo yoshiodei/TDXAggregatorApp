@@ -14,6 +14,8 @@ import seasameSeedIcon from '../assets/sesame-seed-white.png';
 import sheaNutIcon from '../assets/shea-nut-white.png';
 import sorghumIcon from '../assets/sorghum-white.png';
 import soybeanIcon from '../assets/soybean-white.png';
+import useConnection from '../hooks/useConnection';
+import OfflinePanel from '../components/offlinePanel';
 
 export default function FarmerDetails({ f7router }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -22,6 +24,8 @@ export default function FarmerDetails({ f7router }) {
   const [phone, setPhone] = useState('');
   const [momoNumber, setMomoNumber] = useState({ message: '', number: '' });
   const [farmer, setFarmer] = useState({});
+
+  const {connectionStatus} = useConnection();
 
   const findIcon = (commodity_name) => {
     let iconValue;
@@ -269,12 +273,12 @@ const completeOrder = async (farmerDataObj) => {
           </div>)
           }
 
-          {(!momoNumber.message && !momoNumber.number) ? (<div className="mt-5">
+          {((!momoNumber.message && !momoNumber.number) && connectionStatus) && (<div className="mt-5">
             <button onClick={() => handleSearch()} className="flex justify-center items-center w-full sm:h-[3em] h-[35px]  rounded bg-primary">
               <h6 className="sm:text-lg text-base font-semibold text-white">{isLoadingMomo ? '...loading' : 'Search Number'}</h6>
             </button>
-          </div>) :
-          (<div className="mt-5">
+          </div>)}
+          {(!(!momoNumber.message && !momoNumber.number) && connectionStatus) && (<div className="mt-5">
             <button onClick={() => handleSubmit()} className="flex justify-center items-center w-full sm:h-[3em] h-[35px]  rounded bg-primary">
               <h6 className="sm:text-lg text-base font-semibold text-white">{isLoading ? '...loading' : 'Continue'}</h6>
             </button>
@@ -282,6 +286,11 @@ const completeOrder = async (farmerDataObj) => {
               <button onClick={() => setMomoNumber({message: '', number: ''})}><h6 className="text-center text-[0.9em] text-primary underline">Edit number</h6></button>
             </div>
           </div>)
+          }
+          {
+            !connectionStatus && (
+              <OfflinePanel f7router={f7router} />
+            )
           }
         </div>
 

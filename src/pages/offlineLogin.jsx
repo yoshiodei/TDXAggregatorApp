@@ -134,6 +134,9 @@ export default function OfflineLogin({ f7router }){
             <button onClick={handleSubmit} className="flex justify-center items-center w-full sm:h-[2.5em] h-[30px] rounded bg-primary">
               <h6 className="text-base font-semibold text-white">Log In</h6>
             </button>
+            <button onClick={() => f7router.navigate('/login/')} className="mt-3 rounded bg-white border-2 border-primary h-[30px] sm:h-[3.5em] flex justify-center items-center">
+              <h6 className="font-bold text-primary">Switch to online mode</h6>
+            </button>
           </div>
         </div>
       </div>

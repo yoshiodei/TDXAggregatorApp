@@ -7,6 +7,8 @@ import { FaEyeSlash } from "react-icons/fa"
 import CryptoJS, { crypto } from 'crypto-js'
 import axios from 'axios'
 import store from '../js/store'
+import useConnection from '../hooks/useConnection'
+import OfflinePanel from '../components/offlinePanel'
 
 export default function Login({ f7router }) {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -17,6 +19,7 @@ export default function Login({ f7router }) {
   const [otp, setOTP] = useState('');
   const [pinIsHidden, setPinIsHidden] = useState(true);
 
+  const {connectionStatus} = useConnection();
 
   const handleChange = (e) => {
     const {name, value} = e.target;
@@ -231,22 +234,20 @@ const hashHMAC = (message, key) => {
           </div>
           </div>
           <div className="mt-2">
-            <button onClick={handleSubmit} className="flex justify-center items-center w-full sm:h-[2.5em] h-[30px] rounded bg-primary">
-              <h6 className="text-base font-semibold text-white">{loading ? '...loading' : 'Log In'}</h6>
-            </button>
-            {enableOfflineMode && 
-              (<button
-                onClick={() => f7router.navigate('/offline-login/')} 
-                className="flex justify-center items-center w-full sm:h-[2.5em] h-[30px] rounded bg-slate-400 my-2"
-                >
-                <h6 className="text-base font-semibold text-white">Continue On Offline mode</h6>
-              </button>)
-            }
-            <div className="flex justify-center mt-1">
-              <div className="text-[0.95em]">  
-                <h6 className="w-auto font-semibold text-slate-500 sm:text-left text-center">Don't have an account yet? <button onClick={() => f7router.navigate('/signup/')}  className="w-auto text-primary font-semibold">Sign Up</button></h6>
+            {connectionStatus && (<div>
+              <button onClick={handleSubmit} className="flex justify-center items-center w-full sm:h-[2.5em] h-[30px] rounded bg-primary">
+                <h6 className="text-base font-semibold text-white">{loading ? '...loading' : 'Log In'}</h6>
+              </button>
+              <div className="flex justify-center mt-1">
+                <div className="text-[0.95em]">  
+                  <h6 className="w-auto font-semibold text-slate-500 sm:text-left text-center">Don't have an account yet? <button onClick={() => f7router.navigate('/signup/')}  className="w-auto text-primary font-semibold">Sign Up</button></h6>
+                </div>
               </div>
-            </div>
+            </div>)}
+            {!connectionStatus && (
+              <OfflinePanel f7router={f7router} />
+             )
+            }           
           </div>
         </div>
       </div>
