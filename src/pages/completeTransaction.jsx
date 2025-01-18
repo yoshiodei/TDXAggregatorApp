@@ -36,7 +36,11 @@ export default function CompleteTransaction({ f7route, f7router }) {
 
   const getSiloValue = (siloid) => {
     const siloData = JSON.parse(localStorage.getItem('silos')) || [];
-    if(!siloData?.length){ f7.dialog.alert('Unable to fetch silo data','') }
+    if(!siloData?.length){ 
+      // f7.dialog.alert('Unable to fetch silo data','') 
+      console.log('unable to fetch silo data');
+      
+    }
     else{
       const data = siloData.find((silo) => silo.token === siloid) || null;
       setSiloValue(data.siloname);
@@ -45,7 +49,10 @@ export default function CompleteTransaction({ f7route, f7router }) {
 
   const getCommunityValue = async(communityid) => {
     const communityData = JSON.parse(localStorage.getItem('communities')) || [];
-    if(!communityData?.length){ f7.dialog.alert('Unable to fetch community data','') }
+    if(!communityData?.length){ 
+      // f7.dialog.alert('Unable to fetch community data','')
+      console.log('Unable to fetch community data');
+     }
     else{
       const data = communityData.find((community) => community.id === communityid) || null;
       setCommunityValue(data.name);
@@ -74,7 +81,7 @@ export default function CompleteTransaction({ f7route, f7router }) {
     } catch (error) {
       console.error('Error fetching data:', error);
     //   setErrorMessage(error.code);
-      f7.dialog.alert('Unable to fetch price data','');
+      // f7.dialog.alert('Unable to fetch price data','');
     }
 }
 
@@ -109,7 +116,7 @@ const verifyMomoNumber = async (mobile) => {
     } catch (error) {
       console.error('Error fetching data:', error);
     //   setErrorMessage(error.code);
-      f7.dialog.alert('Unable to fetch data','');
+      // f7.dialog.alert('Unable to fetch data','');
     }
   }
 

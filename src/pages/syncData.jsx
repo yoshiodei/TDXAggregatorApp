@@ -8,6 +8,7 @@ import {
   } from 'framework7-react'
 import axios from 'axios';
 import store from '../js/store'; 
+import useConnection from '../hooks/useConnection';
 
 export default function SyncData({ f7router }) {
   console.log('authorized user', store.state.user);
@@ -40,7 +41,7 @@ export default function SyncData({ f7router }) {
     } catch (error) {
       console.error('Error fetching data:', error);
       setErrorMessage(error.code);
-      // f7.dialog.alert('Unable to fetch data','');
+      f7.dialog.alert('Unable to fetch data','');
     }
   }
 
@@ -119,7 +120,7 @@ export default function SyncData({ f7router }) {
     } catch (error) {
       console.error('Error fetching data:', error);
       setErrorMessage(error.code);
-      f7.dialog.alert('Unable to fetch data','');
+      // f7.dialog.alert('Unable to fetch data','');
     }
 }
 
@@ -172,8 +173,9 @@ if(loading){
    )  
 }
 
+const {connectionStatus} = useConnection();
   
-if(errorMessage === 'ERR_NETWORK'){
+if(!connectionStatus){
   return (
     <Page name="sync">
       <div className="w-full h-screen bg-slate-100 flex flex-col justify-center items-center p-5">
